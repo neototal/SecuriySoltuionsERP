@@ -24,4 +24,6 @@
         /*border: 1px black solid;*/
     }
 </style>
-
+<?php
+include_once $pth . 'Imports/company/compay_loader.php';
+?>

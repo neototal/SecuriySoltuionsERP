@@ -38,4 +38,6 @@ for ($i = 0; $i < $count; $i++) {
     $pth = $pth . "../";
 }
 $_SESSION['pth']=$pth;
+
+
 ?>
