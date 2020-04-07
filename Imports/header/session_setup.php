@@ -31,7 +31,7 @@ $_SESSION['LAST_ACTIVITY'] = $time;
 
 
 $total_url = $_SERVER['REQUEST_URI'] . "";
-$curnt_location = explode("NeoTotalSystem/", $total_url)[1];
+$curnt_location = explode("SecuriySoltuionsERP/", $total_url)[1];
 $count = count(explode("/", $curnt_location)) - 1;
 $pth = "";
 for ($i = 0; $i < $count; $i++) {
