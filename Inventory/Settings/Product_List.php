@@ -65,20 +65,13 @@ $_SESSION['page_id'] = "000003";
                                         </div>
                                     </div>
                                     <div class="row">
-                                        <div class="col-lg-12 w3-dropdown-hover w3-theme-l4">
-                                            
-                                                <button onclick="add_new_data()" class="btn btn-default w3-theme-dark w3-input w3-button w3-margin-top w3-hover-blue-grey add_record">
+                                        <div class="col-lg-12">
+                                            <button onclick="add_new_data()" class="btn btn-default w3-theme-dark w3-input w3-button w3-margin-top w3-hover-blue-grey add_record">
                                                     <!--<span class="fa fa-plus"></span>-->
-                                                    <strong>
-                                                        Settings
-                                                    </strong>
-                                                </button>
-                                            <div class="w3-dropdown-content w3-bar-block  w3-input">
-                                                    <button class="w3-button w3-bar-item">Test 1</button>
-                                                    <button class="w3-button w3-bar-item">Test 1</button>
-                                                    <button class="w3-button w3-bar-item">Test 1</button>
-                                                </div>
-                                           
+                                                <strong>
+                                                    Settings
+                                                </strong>
+                                            </button>                                       
                                         </div> 
                                     </div>
                                 </div>
