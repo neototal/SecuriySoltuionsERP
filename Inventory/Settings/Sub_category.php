@@ -7,7 +7,7 @@ and open the template in the editor.
 
 <?php
 include_once '../../Imports/header/session_setup.php';
-$_SESSION['pth'] = "../../";
+//$_SESSION['pth'] = "../../";
 $_SESSION['title'] = "Sub Category List";
 $_SESSION['page_id'] = "000002";
 ?>
@@ -45,7 +45,7 @@ $_SESSION['page_id'] = "000002";
                         for (var i = 0; i < json.length; i++) {
                             $("#sub_main_cat_name").empty();
                             $("#sub_dis").empty();
-                            document.getElementById("sub_main_img").setAttribute("src", "../../" + json[i].icon_pic);
+                            document.getElementById("sub_main_img").setAttribute("src", "<?php echo $pth; ?>" + json[i].icon_pic);
                             document.getElementById("sub_main_cat_name").appendChild(document.createTextNode(json[i].name));
                             document.getElementById("sub_dis").appendChild(document.createTextNode(json[i].dis));
 
@@ -101,12 +101,7 @@ $_SESSION['page_id'] = "000002";
                     }
                 });
             }
-            function add_modal_open() {
-                reset_add_data_modal();
-                $("#myModal").modal('show');
-                var error_id = document.getElementById("error_id");
-                $(error_id).empty();
-            }
+
         </script>
     </head>
     <body class="w3-theme-light">
@@ -143,9 +138,11 @@ $_SESSION['page_id'] = "000002";
                                 <div class="container">
                                     <div class="row">
                                         <div class="col-lg-12">
-                                            <button onclick="add_modal_open()" class="btn btn-default w3-theme-dark w3-input w3-margin-top w3-hover-blue-grey add_record">
-                                                <span class="fa fa-plus"></span>
-                                                Add New Product
+                                            <button onclick="add_new_data()" class="btn btn-default w3-theme-dark w3-input w3-margin-top w3-hover-blue-grey add_record">
+                                                <!--<span class="fa fa-plus"></span>-->
+                                                <strong>
+                                                     New Sub Category
+                                                </strong>
                                             </button>
                                         </div>
                                     </div>
@@ -201,6 +198,7 @@ $_SESSION['page_id'] = "000002";
                 div_col_01.setAttribute("id", "sub_dis");
 
                 var strong = document.createElement("strong");
+                strong.setAttribute("class","w3-large");
                 var name_text = document.createTextNode(name);
                 strong.appendChild(name_text);
 
@@ -235,7 +233,7 @@ $_SESSION['page_id'] = "000002";
                 btn_span_open.setAttribute("class", "fa fa-list-ul");
                 btn_open.appendChild(btn_span_open);
                 btn_open.addEventListener("click", function () {
-
+                    next_page(id);
                 });
 
                 var btn_tooltip_text_open = document.createElement("span");
@@ -259,8 +257,8 @@ $_SESSION['page_id'] = "000002";
                 btn_span_update.setAttribute("class", "fa fa-pencil-square-o");
                 btn_update.appendChild(btn_span_update);
                 btn_update.addEventListener("click", function () {
-                    alert(id+"main body");
-                    sub_category_modal_update(main_cat_id, id, name, dis, show_web);
+//                    (id, name, dis, show_on_web, state_of_update) {
+                    set_up_modal(id, name, dis, show_web, true);
                 });
 
                 var btn_tooltip_update = document.createElement("span");
@@ -282,6 +280,11 @@ $_SESSION['page_id'] = "000002";
                 var btn_span_del = document.createElement("span");
                 btn_span_del.setAttribute("class", "fa fa-trash-o");
                 btn_del.appendChild(btn_span_del);
+                btn_del.addEventListener("click", function () {
+                    if (confirm("do you want to delete " + name + " ?")) {
+                        data_del(id);
+                    }
+                });
 
                 var btn_tooltip_del = document.createElement("span");
                 btn_tooltip_del.setAttribute("class", "w3-text w3-tag w3-small w3-red w3-padding-8 w3-center-align");
@@ -301,6 +304,36 @@ $_SESSION['page_id'] = "000002";
 
                 div_body.appendChild(div_row);
 
+            }
+
+            function data_del(id, main_id, name) {
+                var sending_value = "id=" + id + "&name=" + name + "&main_name=" + document.getElementById("sub_main_cat_name").innerHTML;
+                $.ajax({
+                    url: "sub_category/del_data.php",
+                    type: 'POST',
+                    data: sending_value,
+                    cache: false,
+                    success: function (data) {
+                        load_data();
+                    }
+                });
+            }
+            function next_page(id) {
+                var sending_value = "sub_cat_id=" + id;
+                $.ajax({
+                    url: "sub_category/sub_category_id_management.php",
+                    type: 'POST',
+                    data: sending_value,
+                    cache: false,
+                    success: function (data) {
+                        if (data == "ok") {
+                            window.location.href = "Product_List.php";
+                        } else {
+                            alert('something has went wrong');
+                        }
+
+                    }
+                });
             }
         </script>
         <div class="container w3-padding-16  w3-round w3-theme-l4 w3-card" id="body_table">
@@ -348,8 +381,7 @@ $_SESSION['page_id'] = "000002";
 
         <?php
         include_once '../../Imports/footer/footer_system.php';
-        include_once './sub_category/modal/add_sub_category.php';
-        include_once './sub_category/modal/update_sub_category.php';
+        include_once './sub_category/modal/sub_category.php';
         ?>
     </body>
 </html>

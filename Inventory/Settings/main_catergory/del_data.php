@@ -1,7 +1,8 @@
 <?php
-
+include_once '../../../Imports/session_manager/session_setup.php';
 include_once '../../../Imports/DB/Database_conn.php';
 include_once '../../../Imports/audit/add_data.php';
+include_once '../../../Imports/notification/add_data.php';
 
 $id = isset($_POST['id']) ? $id = $_POST['id'] : $aduit_error;
 $name = isset($_POST['name']) ? $name = $_POST['name'] : $aduit_error;

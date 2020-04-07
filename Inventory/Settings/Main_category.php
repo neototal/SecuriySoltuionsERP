@@ -7,9 +7,12 @@ and open the template in the editor.
 -->
 <?php
 include_once '../../Imports/header/session_setup.php';
-$_SESSION['pth'] = "../../";
+//$_SESSION['pth'] = "../../";
 $_SESSION['title'] = "Main Category List";
 $_SESSION['page_id'] = "000001";
+if (isset($_SESSION['remove_img'])) {
+    unset($_SESSION['remove_img']);
+}
 ?>
 <html>
     <head>
@@ -30,17 +33,18 @@ $_SESSION['page_id'] = "000001";
 
             });
 
-            
+
             function data_setup() {
                 var getText = document.getElementById("getsearch");
                 var search_values = "value=" + getText.value;
-                i = 0;
+
                 $.ajax({
                     url: "main_catergory/load_data.php",
                     type: 'POST',
                     data: search_values,
                     cache: false,
                     success: function (data) {
+//                        alert(data);
                         $("#body_table").empty();
                         var json = eval(data);
                         for (var i = 0; i < json.length; i++) {
@@ -86,10 +90,20 @@ $_SESSION['page_id'] = "000001";
                 }
 
 
+                var div_col_00 = document.createElement("div");
+                div_col_00.setAttribute("class", "col-lg-2");
+
+                var img = document.createElement("img");
+                img.setAttribute("src", "<?php echo $pth; ?>" + img_url);
+                img.setAttribute("class", "image-preview upload-preview w3-center");
+                div_col_00.appendChild(img);
+
+
                 var div_col_01 = document.createElement("div");
-                div_col_01.setAttribute("class", "col-lg-9");
+                div_col_01.setAttribute("class", "col-lg-7");
 
                 var strong = document.createElement("strong");
+                strong.setAttribute("class","w3-large");
                 var nameTextNode = document.createTextNode(name);
                 strong.appendChild(nameTextNode);
 
@@ -144,9 +158,9 @@ $_SESSION['page_id'] = "000001";
                 span_02.setAttribute("class", "fa fa-pencil-square-o");
                 button_02.appendChild(span_02);
                 button_02.addEventListener("click", function () {
-//                    alert('test2');
-//                    setup_update_body(id, name, dis, img_url, show_no_web);
-                    update_data_loader_modal(id, name, dis, img_url, show_no_web);
+//                    alert('tes');
+                    set_up_modal(id, name, dis, img_url, show_no_web, true);
+//                    update_data_loader_modal(id, name, dis, img_url, show_no_web);
                 });
 
                 var span_update = document.createElement("span");
@@ -183,6 +197,7 @@ $_SESSION['page_id'] = "000001";
                 div_col_04.appendChild(button_03);
                 div_col_04.appendChild(span_del);
 
+                div_row.appendChild(div_col_00);
                 div_row.appendChild(div_col_01);
                 div_row.appendChild(div_col_02);
                 div_row.appendChild(div_col_03);
@@ -194,6 +209,7 @@ $_SESSION['page_id'] = "000001";
 
             function delete_data(id, name) {
                 var sending_value = "id=" + id + "&name=" + name;
+//                alert(sending_value);
                 $.ajax({
                     url: "main_catergory/del_data.php",
                     type: 'POST',
@@ -221,46 +237,7 @@ $_SESSION['page_id'] = "000001";
                     }
                 });
             }
-            function update_data_loader_modal(id, name, dis, img_url, show_no_web) {
-//                alert('test1');
-                remove_update();
-//                alert('test');
-                if (show_no_web == 1) {
-                    $("#show_on_web_update").prop("checked", true);
-                }
 
-                $("#myModal_update").modal('show');
-                var name_text = document.getElementById("name_update");
-                name_text.setAttribute("value", name);
-
-                var dis_text = document.getElementById("dis_update");
-                dis_text.appendChild(document.createTextNode(dis));
-
-                var image_state = document.getElementById("image_state_update");
-                image_state.value = "1";
-
-                var img_div = document.getElementById("targetLayer_update");
-                if (img_url == "") {
-                    img_div.appendChild(document.createTextNode("No Image"));
-                    document.getElementById("img_befor_update").style.display = "block";
-                    document.getElementById("image_state_update").value = "0";
-//                    alert('no image');
-                } else {
-                    var img = document.createElement("img");
-                    img.setAttribute("src", "../../" + img_url);
-                    img.setAttribute("class", "image-preview upload-preview");
-
-                    img_div.appendChild(img);
-                    document.getElementById("img_after_update").style.display = "block";
-                    document.getElementById("image_state_update").value = "1";
-//                    alert('image');
-                }
-                var update_btn = document.getElementById("update_data");
-                update_btn.addEventListener("click", function () {
-                    update_data(id, name, dis, show_no_web);
-                });
-
-            }
         </script>
         <style type="text/css">
             div{
@@ -302,7 +279,7 @@ $_SESSION['page_id'] = "000001";
                 </div>
                 <div class="col-lg-3 col-sm-12">
 
-                    <button class="w3-button w3-theme-dark w3-input w3-round add_record" onclick="add_new()"><span class="fa fa-plus"></span> Add New</button>
+                    <button class="w3-button w3-theme-dark w3-input w3-round add_record" onclick="add_new()"><span class="fa fa-plus"></span>  New Category</button>
                 </div>
             </div>
             <div class="container w3-padding-16  w3-round w3-theme-l4 w3-card" id="body_table">
@@ -335,8 +312,7 @@ $_SESSION['page_id'] = "000001";
 
         <?php
         include_once '../../Imports/footer/footer_system.php';
-        include_once './main_catergory/modal/add_catergory.php';
-        include_once './main_catergory/modal/update_catergory.php';
+        include_once './main_catergory/modal/catergory.php';
         ?>
 
 
