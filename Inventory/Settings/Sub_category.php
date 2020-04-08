@@ -18,21 +18,39 @@ $_SESSION['page_id'] = "000002";
         include_once '../../Imports/header/basic_header.php';
         include_once '../../Imports/admin_roll_settings/roll_manager.php';
         ?>
-        <style type="text/css">
-            div{
-                /*border: 1px black solid;*/
-            }
 
-            #sub_dis {
-                text-align: justify;
-                text-justify: inter-word;
-            }
-
-        </style>
         <script type="text/javascript">
             $(document).ready(function () {
+                $("#myModal_loder").modal('show');
+                set_header_info();
                 load_data();
+
+
             });
+
+            function set_header_info() {
+                var setup_button_list = new Array();
+                setup_button_list.push("New Sub Category");
+                setup_button_list.push("Branding Settings");
+                var button_list = setup_button(setup_button_list);
+
+                button_list[0].addEventListener("click", function () {
+//                    alert('test');
+                    add_new_data();
+                });
+                button_list[1].addEventListener("click", function () {
+//                    alert('test2');
+                    setup_of_brand();
+                });
+                search();
+            }
+            function search() {
+                var get_search = document.getElementById("search_value");
+                get_search.addEventListener("keydown", function () {
+                    load_sub_category();
+                });
+            }
+
             function load_data() {
                 $("#body_table").empty();
                 $.ajax({
@@ -43,16 +61,10 @@ $_SESSION['page_id'] = "000002";
 //                        alert(data);
                         var json = eval(data);
                         for (var i = 0; i < json.length; i++) {
-                            $("#sub_main_cat_name").empty();
-                            $("#sub_dis").empty();
-                            document.getElementById("sub_main_img").setAttribute("src", "<?php echo $pth; ?>" + json[i].icon_pic);
-                            document.getElementById("sub_main_cat_name").appendChild(document.createTextNode(json[i].name));
-                            document.getElementById("sub_dis").appendChild(document.createTextNode(json[i].dis));
 
 
-                            if (json[i].show_in_web == 1) {
-                                $("#show_on_web").prop("checked", true);
-                            }
+                            load_main_body_data(json[i].id, json[i].icon_pic, json[i].name, "Sub Category", json[i].dis, "", json[i].show_in_web);
+
                             load_sub_category();
                         }
                         if (json.length == 0) {
@@ -64,7 +76,8 @@ $_SESSION['page_id'] = "000002";
                 });
             }
             function load_sub_category() {
-                var sending_value = "val=" + $("#search_value").val() + "&name=" + document.getElementById("sub_main_cat_name").innerHTML;
+                $("#myModal_loder").modal('show');
+                var sending_value = "val=" + $("#search_value").val() + "&name=" + document.getElementById("sub_cat_name").innerHTML;
                 var div_body = document.getElementById("body_table");
                 var main_id =<?php echo isset($_SESSION['data_id']) ? $_SESSION['data_id'] : ""; ?>;
                 $(div_body).empty();
@@ -102,6 +115,12 @@ $_SESSION['page_id'] = "000002";
                 });
             }
 
+
+            function setup_of_brand() {
+                window.location.href = "sub_category/setup_brand/Brand_management.php";
+            }
+
+
         </script>
     </head>
     <body class="w3-theme-light">
@@ -110,60 +129,12 @@ $_SESSION['page_id'] = "000002";
         ?>
 
         <div class="container">
-            <div class="row jumbotron">
-                <div class="col-lg-3 col-sm-3">
-                    <img src="../../Imports/img/main_categories/pictesekljfsd.png" id="sub_main_img" style="width: 250px;">
-                </div>
-                <div class="col-lg-9 col-sm-9">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-lg-6 w3-border-black w3-border-bottom w3-margin-bottom">
-                                <h2 id="sub_main_cat_name">Camera</h2>
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="input-group">
-                                    <input type="text" class="form-control" id="search_value" onclick="load_data()" autocomplete="off" placeholder="search">
-                                    <span class="input-group-btn">
-                                        <button class="btn btn-default"><span class="fa fa-search"></span></button>
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-lg-8" id="sub_dis">
-                                Bootstrap is the most popular HTML, CSS, and JS framework for developing
-                                responsive, mobile-first projects on the web.
-                            </div>
-                            <div class="col-lg-4">
-                                <div class="container">
-                                    <div class="row">
-                                        <div class="col-lg-12">
-                                            <button onclick="add_new_data()" class="btn btn-default w3-theme-dark w3-input w3-margin-top w3-hover-blue-grey add_record">
-                                                <!--<span class="fa fa-plus"></span>-->
-                                                <strong>
-                                                     New Sub Category
-                                                </strong>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-                        <!------>
-
-                        <div class="row">
-                            <div class="col-lg-12">
-                                <input class="w3-check" id="show_on_web" type="checkbox">
-                                <label>View On Main Web </label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <?php
+            include_once './setting_need/page_header.php';
+            ?>
             <div class="row">
                 <div class="col-lg-12">
-                    <ul class="breadcrumb">
+                    <ul class="breadcrumb" id="breadcrumb_list">
                         <li class="breadcrumb-item">
                             <a href="Main_category.php">Main Category List</a>
                         </li>
@@ -198,7 +169,7 @@ $_SESSION['page_id'] = "000002";
                 div_col_01.setAttribute("id", "sub_dis");
 
                 var strong = document.createElement("strong");
-                strong.setAttribute("class","w3-large");
+                strong.setAttribute("class", "w3-large");
                 var name_text = document.createTextNode(name);
                 strong.appendChild(name_text);
 
@@ -335,6 +306,7 @@ $_SESSION['page_id'] = "000002";
                     }
                 });
             }
+
         </script>
         <div class="container w3-padding-16  w3-round w3-theme-l4 w3-card" id="body_table">
             <div class="row w3-border-bottom w3-border-top w3-border-theme w3-padding">

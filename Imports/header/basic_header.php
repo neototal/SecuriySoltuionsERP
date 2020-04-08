@@ -9,7 +9,11 @@ isset($_SESSION['pth']) ? $pth = $_SESSION['pth'] : $pth = "";
 ?>
 
 <title>Neo Total Security Solutions | <?php echo $_SESSION['title']; ?> </title>
-
+<style type="text/css">
+    div{
+        /*border: 1px black solid;*/
+    }
+</style>
 <!--w3css color theam-->
 <link rel="stylesheet" href="<?php echo $pth; ?>Imports/lib/w3css_color.css">
 <?php

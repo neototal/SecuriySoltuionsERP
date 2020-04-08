@@ -1,18 +1,20 @@
 <script type="text/javascript">
     function add_new_data() {
+//        alert('test');
         set_up_modal("", "", "", 0, false);
     }
     function set_up_modal(id, name, dis, show_on_web, state_of_update) {
+        
         var modal_head = document.getElementById("modal_head");
         $(modal_head).empty();
         var breadcrumb_data = document.getElementById("breadcrumb_data");
         $(breadcrumb_data).empty();
-
-        var head_text = "Add Sub Category to " + document.getElementById("sub_main_cat_name").innerHTML;
+        
+        var head_text = "Add Sub Category to " + document.getElementById("sub_cat_name").innerHTML;
         if (state_of_update) {
             head_text = "Update " + name + " Sub Category";
         }
-
+        
         modal_head.appendChild(document.createTextNode(head_text));
         breadcrumb_data.appendChild(document.createTextNode(head_text));
 
@@ -224,7 +226,7 @@
             }
             var sending_value = "id=" + id + "&old_name=" + old_name_text + "&old_dis=" + old_dis_text + "&old_show_on_web=" + old_check_value +
                     "&name=" + name.value + "&dis=" + dis.value + "&show_on_web=" + value_of_showing_web +
-                    "&main_cat_name=" + document.getElementById("sub_main_cat_name").innerHTML;
+                    "&main_cat_name=" + document.getElementById("sub_cat_name").innerHTML;
             $.ajax({
                 url: "sub_category/update_data.php",
                 type: 'POST',

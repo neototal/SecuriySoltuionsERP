@@ -6,6 +6,7 @@ include_once '../../../Imports/audit/add_data.php';
 include_once '../../../Imports/notification/add_data.php';
 
 $main_category_id = isset($_SESSION['data_id']) ? $_SESSION['data_id'] : error_send_();
+//$name_of_search = isset($_SESSION['val']) ? $_SESSION['val'] : "";
 
 $database_connction = database();
 $sql_query = "select * from main_category where idmain_category='" . $main_category_id . "' ";
@@ -18,7 +19,7 @@ if ($result->num_rows > 0) {
 }
 echo json_encode($json);
 
-function error_send_(){
+function error_send_() {
     
 }
 ?>

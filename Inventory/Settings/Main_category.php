@@ -29,6 +29,7 @@ if (isset($_SESSION['remove_img'])) {
         </style>
         <script type="text/javascript">
             $(document).ready(function () {
+                $("#myModal_loder").modal('show');
                 data_setup();
 
             });
@@ -103,7 +104,7 @@ if (isset($_SESSION['remove_img'])) {
                 div_col_01.setAttribute("class", "col-lg-7");
 
                 var strong = document.createElement("strong");
-                strong.setAttribute("class","w3-large");
+                strong.setAttribute("class", "w3-large");
                 var nameTextNode = document.createTextNode(name);
                 strong.appendChild(nameTextNode);
 
@@ -237,6 +238,8 @@ if (isset($_SESSION['remove_img'])) {
                     }
                 });
             }
+            
+            function branding_settings(){}
 
         </script>
         <style type="text/css">
@@ -273,13 +276,20 @@ if (isset($_SESSION['remove_img'])) {
             </div>
             <div class="row w3-margin">
                 <div class="col-lg-9 col-sm-12">
-                    <ol class="breadcrumb">
+                    <ol class="breadcrumb" id="breadcrumb_list">
                         <li class="breadcrumb-item active">Main Category List</li>
                     </ol>    
                 </div>
+<!--                <div class="col-lg-2 col-sm-12">
+                    <button class="w3-button w3-theme-dark w3-input w3-round add_record">
+                        <strong>Branding Settings</strong>
+                    </button>
+                </div>-->
                 <div class="col-lg-3 col-sm-12">
 
-                    <button class="w3-button w3-theme-dark w3-input w3-round add_record" onclick="add_new()"><span class="fa fa-plus"></span>  New Category</button>
+                    <button class="btn btn-default w3-button w3-theme-dark w3-input w3-round add_record w3-hover-blue-grey" onclick="add_new()">
+                        <strong>    New Category</strong>
+                    </button>
                 </div>
             </div>
             <div class="container w3-padding-16  w3-round w3-theme-l4 w3-card" id="body_table">

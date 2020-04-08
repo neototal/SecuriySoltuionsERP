@@ -25,5 +25,8 @@
     }
 </style>
 <?php
+//C:\xampp\htdocs\SecuriySoltuionsERP\Imports\menu\loader.php
+include_once  $pth .'Imports/menu/loader.php';
 include_once $pth . 'Imports/company/compay_loader.php';
+
 ?>
