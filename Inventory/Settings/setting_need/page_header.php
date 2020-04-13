@@ -77,7 +77,7 @@
 </script>   
 
 <div class="row jumbotron w3-theme-l4">
-    <div class="col-lg-3 col-sm-3">
+    <div class="col-lg-3 col-sm-3 w3-center">
         <img src="<?php echo $pth;?>Imports/img/Settings/not_found.png" id="sub_main_img" class="w3-round" style="width: 250px;">
     </div>
     <div class="col-lg-9 col-sm-9">
