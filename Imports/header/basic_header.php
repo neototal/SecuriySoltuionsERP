@@ -13,6 +13,18 @@ isset($_SESSION['pth']) ? $pth = $_SESSION['pth'] : $pth = "";
     div{
         /*border: 1px black solid;*/
     }
+    #targetLayer{
+        float:left;
+        width:150px;
+        height:150px;
+        text-align:center;
+        line-height:150px;
+        font-weight: bold;
+        color: #C0C0C0;
+        background-color: #F0E8E0;
+        border-bottom-left-radius: 4px;
+        border-top-left-radius: 4px;
+    }
 </style>
 <!--w3css color theam-->
 <link rel="stylesheet" href="<?php echo $pth; ?>Imports/lib/w3css_color.css">

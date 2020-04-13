@@ -193,7 +193,7 @@
             if (check.checked) {
                 value_of_showing_web = 1;
             }
-            var sending_value = "name=" + name.value + "&dis=" + dis.value + "&show_on_web=" + value_of_showing_web + "&main_name=" + document.getElementById("sub_main_cat_name").innerHTML;
+            var sending_value = "name=" + name.value + "&dis=" + dis.value + "&show_on_web=" + value_of_showing_web + "&main_name=" + document.getElementById("sub_cat_name").innerHTML;
 
             $.ajax({
                 url: "sub_category/add_data.php",
@@ -243,7 +243,7 @@
 
 <!-- Modal -->
 
-<div class="modal fade w3-white w3-opacity w3-right" id="myModal" role="dialog">
+<div class="modal fade w3-white w3-opacity w3-right" data-backdrop="static" data-keyboard="false" id="myModal" role="dialog">
     <div class="modal-dialog">
         <!-- Modal content-->
         <div class="modal-content w3-theme-l4">

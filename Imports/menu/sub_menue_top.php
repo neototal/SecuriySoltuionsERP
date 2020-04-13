@@ -36,6 +36,25 @@ function error() {
     div{
         /*border: 1px black solid;*/
     }
+    .image-preview {	
+        width:150px;
+        height:150px;
+        border-bottom-left-radius: 4px;
+        border-top-left-radius: 4px;
+    }
+
+    #targetLayer{
+        float:left;
+        width:150px;
+        height:150px;
+        text-align:center;
+        line-height:150px;
+        font-weight: bold;
+        color: #C0C0C0;
+        background-color: #F0E8E0;
+        border-bottom-left-radius: 4px;
+        border-top-left-radius: 4px;
+    }
 </style>
 <script type="text/javascript">
     function logout() {
