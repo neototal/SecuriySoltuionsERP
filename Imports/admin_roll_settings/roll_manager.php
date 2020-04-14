@@ -3,6 +3,9 @@
 //update_record
 //delete_record
 //add_record
+include_once $pth.'Imports/admin_roll_settings/user.php';
+
+
 get_page_id(isset($_SESSION['page_id']) ? $_SESSION['page_id'] : "");
 
 function get_page_id($get_page_id) {

@@ -12,7 +12,7 @@ if ($username == 'Not Found') {
 } else {
     include_once '../Imports/DB/Database_conn.php';
     $conn = database();
-    $sql_query = "select * from user_login where BINARY  user_name='" . $username . "' and BINARY password='" . $password . "'";
+    $sql_query = "select * from user_login where user_name='" . $username . "' and password='" . $password . "'";
     $result = $conn->query($sql_query);
     if ($result->num_rows > 0) {
         while($row=$result->fetch_assoc()){

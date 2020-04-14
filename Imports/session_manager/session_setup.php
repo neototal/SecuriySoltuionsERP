@@ -37,7 +37,10 @@ $pth = "";
 for ($i = 0; $i < $count; $i++) {
     $pth = $pth . "../";
 }
-$_SESSION['pth']=$pth;
+$_SESSION['pth'] = $pth;
 
+function capitalize($text_value) {
+    return ucfirst(addslashes($text_value));
+}
 
 ?>

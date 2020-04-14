@@ -243,7 +243,7 @@
 
 <!-- Modal -->
 
-<div class="modal fade w3-white w3-opacity w3-right" id="myModal" role="dialog">
+<div class="modal fade w3-white w3-opacity w3-right" data-backdrop="static" data-keyboard="false" id="myModal" role="dialog">
     <div class="modal-dialog">
         <!-- Modal content-->
         <div class="modal-content w3-theme-l4">
