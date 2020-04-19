@@ -20,7 +20,7 @@ $_SESSION['page_id'] = "000003";
 
         <script type="text/javascript">
             function settings_href() {
-                window.location.href = "Product_List/variable_settings.php";
+                window.location.href = "Product_List/Variable_management/variable_settings.php";
             }
             $(document).ready(function () {
                 $("#myModal_loder").modal('show');
@@ -35,11 +35,11 @@ $_SESSION['page_id'] = "000003";
                 var button_list = setup_button(setup_button_list);
 
                 button_list[0].addEventListener("click", function () {
-//                    alert('test');
+                    alert('test');
 
                 });
                 button_list[1].addEventListener("click", function () {
-//                    alert('test2');
+                    settings_href();
 
                 });
 
@@ -48,7 +48,7 @@ $_SESSION['page_id'] = "000003";
                 var send_value = "sub_id=<?php echo isset($_SESSION['sub_cat_id']) ? $_SESSION['sub_cat_id'] : ""; ?>";
 //                alert(send_value);
                 $.ajax({
-                    url: "Product_List/Variable_management/variable_settings/load_sub_head.php",
+                    url: "Product_List/load_sub_head.php",
                     type: 'POST',
                     data: send_value,
                     cache: false,

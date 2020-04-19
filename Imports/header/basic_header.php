@@ -9,6 +9,7 @@ isset($_SESSION['pth']) ? $pth = $_SESSION['pth'] : $pth = "";
 ?>
 
 <title>Neo Total Security Solutions | <?php echo $_SESSION['title']; ?> </title>
+
 <style type="text/css">
     div{
         /*border: 1px black solid;*/
@@ -45,3 +46,20 @@ include_once $pth . 'Imports/lib/js_online_improrts.php';
         background-image: url('<?php echo $pth; ?>Imports/img/finalLogo.png');background-repeat: no-repeat;background-position:  bottom right;background-size: 20%;
     }
 </style>
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+//        alert('test');
+        var get_browser_height = window.innerHeight * 70 / 100;
+//        alert(get_browser_height);
+        var modal_body = document.getElementById("modal_body");
+        var modal_body_height = modal_body.offsetHeight;
+        modal_body.style.maxHeight = get_browser_height + "px";
+        modal_body.style.overflowX = "hidden";
+        if (modal_body_height > get_browser_height) {
+            modal_body.style.overflowY = "scroll";
+        }
+
+    });
+</script>

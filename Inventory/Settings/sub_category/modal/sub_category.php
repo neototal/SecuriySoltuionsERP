@@ -193,7 +193,7 @@
             if (check.checked) {
                 value_of_showing_web = 1;
             }
-            var sending_value = "name=" + name.value + "&dis=" + dis.value + "&show_on_web=" + value_of_showing_web + "&main_name=" + document.getElementById("sub_main_cat_name").innerHTML;
+            var sending_value = "name=" + name.value + "&dis=" + dis.value + "&show_on_web=" + value_of_showing_web + "&main_name=" + document.getElementById("sub_cat_name").innerHTML;
 
             $.ajax({
                 url: "sub_category/add_data.php",
@@ -201,8 +201,8 @@
                 data: sending_value,
                 cache: false,
                 success: function (data) {
-//                    alert(data);
-                    if (data == 1) {
+                    
+                    if (data == "") {
                         $("#myModal").modal('hide');
                         load_data();
                     } else {

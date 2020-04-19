@@ -9,8 +9,9 @@ include_once '../../../../../Imports/admin_roll_settings/user.php';
 
 $database_connction = database();
 $main_category_id = isset($_SESSION['data_id']) ? $_SESSION['data_id'] : $audit_error;
+$value_of_search=  isset($_POST['val'])?$_POST['val']:"";
 
-$sql_query = "select * from brand_info where ast='1' and idbrand_info in(select DISTINCT brand_info_idbrand_info from brand_info_has_main_category where ast='1' and main_category_idmain_category='" . $main_category_id . "')";
+$sql_query = "select * from brand_info where ast='1' and idbrand_info not in(select DISTINCT brand_info_idbrand_info from brand_info_has_main_category where ast='1' and main_category_idmain_category='" . $main_category_id . "') and  brand_name like '%".$value_of_search."%' ";
 $json = array();
 $result = $database_connction->query($sql_query);
 if ($result->num_rows > 0) {

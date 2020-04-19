@@ -104,7 +104,7 @@
 <script type="text/javascript">
     function add_modal() {
         load_current_other_main_cat_barnd_list();
-//        procee_modal("", "", "", "", "", "", false);
+//        procee_modal("", "", "", "", "",  false);
 
     }
 
@@ -137,48 +137,48 @@
 
         var div_table_body = document.createElement("div");
         div_table_body.setAttribute("class", "w3-margin-top");
-        div_table_body.style.overflowX = "hidden";
-        div_table_body.style.overflowY = "scroll";
-        div_table_body.style.maxHeight = "450px";
+//        div_table_body.style.overflowX = "hidden";
+//        div_table_body.style.overflowY = "scroll";
+//        div_table_body.style.maxHeight = "450px";
         $(div_table_body).empty();
 
         var div_row_01 = document.createElement("div");
         div_row_01.setAttribute("class", "row w3-margin-bottom");
         var div_col_01_01 = document.createElement("div");
-        div_col_01_01.setAttribute("class", "col-lg-1");
+//        div_col_01_01.setAttribute("class", "col-lg-1");
 
         var div_col_01_02 = document.createElement("div");
-        div_col_01_02.setAttribute("class", "col-lg-10 input-group");
+        div_col_01_02.setAttribute("class", "col-lg-8");
 
         var input_search = document.createElement("input");
-        input_search.setAttribute("class", "form-control");
+        input_search.setAttribute("class", "w3-input w3-border-black w3-border");
         input_search.setAttribute("type", "text");
         input_search.setAttribute("placeholder", "search");
         input_search.addEventListener("keydown", function () {
             $(div_table_body).empty();
-            load_other_all_barnds(this.value);
+            load_other_all_barnds(this.value, div_table_body);
         });
 
-        var span_search = document.createElement("span");
-        span_search.setAttribute("class", "input-group-btn");
-        var button_sarch = document.createElement("button");
-        button_sarch.setAttribute("class", "btn btn-default");
-        var button_seach_span = document.createElement("span");
-        button_seach_span.setAttribute("class", "fa fa-search");
-        button_sarch.appendChild(button_seach_span);
-        span_search.appendChild(button_sarch);
+
 
         div_col_01_02.appendChild(input_search);
-        div_col_01_02.appendChild(span_search);
 
-        div_col_01_02.appendChild(input_search);
+
+
 
 
         var div_col_01_03 = document.createElement("div");
-        div_col_01_03.setAttribute("class", "col-lg-1");
+        div_col_01_03.setAttribute("class", "col-lg-4");
+        
+        var button_select = document.createElement("button");
+        button_select.setAttribute("class", "btn btn-default w3-theme-dark w3-input w3-hover-blue-grey");
+        button_select.appendChild(document.createTextNode(" Add More"));
+        button_select.addEventListener("click", function () {
+            procee_modal("", "", "", "", "", false);
+        });
+        div_col_01_03.appendChild(button_select);
 
-
-        div_row_01.appendChild(div_col_01_01);
+//        div_row_01.appendChild(div_col_01_01);
         div_row_01.appendChild(div_col_01_02);
         div_row_01.appendChild(div_col_01_03);
 
@@ -192,18 +192,14 @@
         $(footer_body).empty();
 
 
-        var button_select = document.createElement("button");
-        button_select.setAttribute("class", "w3-button w3-theme-dark w3-hover-blue-grey w3-round");
-        button_select.appendChild(document.createTextNode("Skip To Add More"));
-        button_select.addEventListener("click", function () {
-            procee_modal("", "", "", "", "", "", false);
-        });
-        footer_body.appendChild(button_select);
+
 
         $("#myModal").modal('show');
     }
+    var other_brand_count = 0;
     function load_other_all_barnds(get_search_value, div_table_body) {
         var sending_value = "val=" + get_search_value;
+        other_brand_count = 0;
 //        alert(sending_value)
         $.ajax({
             url: "Brand_management/load_other_brands.php",
@@ -211,10 +207,14 @@
             data: sending_value,
             cache: false,
             success: function (data) {
-                alert(data);
+//                alert(data);
                 var json = eval(data);
+                other_brand_count = json.length;
                 for (var i = 0; i < json.length; i++) {
                     load_current_other_main_cat_barnd_list_data(json[i].idbrand_info, json[i].brand_name, json[i].since_date, json[i].icon_pth, div_table_body);
+                }
+                if (json.length == 0) {
+                    procee_modal("", "", "", "", "", false);
                 }
             }
         });
@@ -242,7 +242,7 @@
 
         //-------------------------------
         var div_col_01_02 = document.createElement("div");
-        div_col_01_02.setAttribute("class", "col-lg-6");
+        div_col_01_02.setAttribute("class", "col-lg-7");
         var h2 = document.createElement("h3");
         var strong = document.createElement("strong");
         strong.appendChild(document.createTextNode(name));
@@ -256,13 +256,13 @@
 
 
         var div_col_01_03 = document.createElement("div");
-        div_col_01_03.setAttribute("class", "col-lg-3");
+        div_col_01_03.setAttribute("class", "col-lg-2");
 
         var button_select = document.createElement("button");
         button_select.setAttribute("class", "btn btn-default w3-theme-dark w3-input w3-margin-top w3-hover-blue-grey select_record");
-        button_select.appendChild(document.createTextNode("add record"));
+        button_select.appendChild(document.createTextNode("add"));
         button_select.addEventListener("click", function () {
-            basic_save(id);
+            basic_save(id, div_row_01);
         });
         div_col_01_03.appendChild(button_select);
 
@@ -275,8 +275,22 @@
 
 
     }
-    function basic_save(id) {
-        var sending_value = "id=" + id;
+    function basic_save(id, row_div) {
+        var sending_value = "id=" + id + "&main_cat=" + document.getElementById("sub_cat_name").innerHTML;
+        $.ajax({
+            url: "Brand_management/update_brand_state.php",
+            type: 'POST',
+            data: sending_value,
+            cache: false,
+            success: function (data) {
+                row_div.remove();
+                other_brand_count--;
+                if (other_brand_count == 0) {
+                    procee_modal("", "", "", "", "", false);
+                }
+                load_data();
+            }
+        });
     }
 
     function procee_modal(id, name, img_pth, since_date, show_on_web_state, update_state) {
@@ -293,7 +307,7 @@
 //        ----------------------------------------------------------------------------------------------------------------
         var heading_text = "Register New Brand To " + document.getElementById("sub_cat_name").innerHTML;
         if (update_state) {
-            heading_text = "update " + name;
+            heading_text = "Update " + name;
         }
         modal_head.appendChild(document.createTextNode(heading_text));
 //        ----------------------------------------------------------------------------------------------------------------
@@ -454,17 +468,18 @@
 
 //        ---------------------------------------------------------------------
 
-
+//        alert(img_pth);
         if (img_pth == "") {
             image_body.appendChild(document.createTextNode("No Image"));
             upload_body.style.display = "block";
             image_body.style.display = "block";
         } else {
             upload_body.style.display = "none";
+            image_body.style.display = "block";
             var img = document.createElement("img");
             img.setAttribute("src", "<?php echo $pth; ?>" + img_pth);
-            image_body.appendChild(img);
             img.setAttribute("class", "image-preview");
+            image_body.appendChild(img);
             change_btn.appendChild(btn_chage);
             remove_btn.appendChild(btn_remove);
 
@@ -483,7 +498,7 @@
                 state_of_web = 1;
             }
 
-            var sending_value = "name=" + name_obj.value + "&date_of_reg=" + data_obj.value + "&show_on_web_sate=" + state_of_web;
+            var sending_value = "name=" + name_obj.value + "&date_of_reg=" + data_obj.value + "&show_on_web_sate=" + state_of_web + "&main_cat=" + document.getElementById("sub_cat_name").innerHTML;
 //            alert(sending_value);
             $.ajax({
                 url: "Brand_management/add_data.php",

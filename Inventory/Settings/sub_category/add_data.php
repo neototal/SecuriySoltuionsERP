@@ -17,17 +17,20 @@ $show_on_web = isset($_POST['show_on_web']) ? $_POST['show_on_web'] : $aduit_err
 $data_array = array();
 $data_array['name_label'] = $main_category_name . " of sub category ";
 $data_array['name_value'] = $name;
-
+if ((isset($userid) || isset($id_of_main_category) || isset($name))) {
 setup_notification_add_new_data(isset($_SESSION['page_id']) ? $_SESSION['page_id'] : $aduit_error, $data_array);
 setup_notification_add_new_data(isset($_SESSION['page_id']) ? $_SESSION['page_id'] : $aduit_error, $data_array);
 
 
 $sql_query = "insert into sub_main_category(name,dis,show_in_web,main_category_idmain_category,user_login_iduser_login,sdt,ast,company_list_idcompany_list) "
-        . "values('" . $name . "','" . $dis . "','" . $show_on_web . "','" . $id_of_main_category . "','" . $userid . "',now(),'1','".$compnay_database_id."')";
-$database_connction = database();
-echo $database_connction->query($sql_query);
+        . "values('" . $name . "','" . $dis . "','" . $show_on_web . "','" . $id_of_main_category . "','" . $userid . "',now(),'1','" . $compnay_database_id . "')";
 
-echo $database_connction->error;
+    $database_connction = database();
+    $database_connction->query($sql_query);
+    echo $database_connction->error;
+}else{
+    include_once '../../../Imports/audit/system_error.php';
+}
 
 function error_response() {
     

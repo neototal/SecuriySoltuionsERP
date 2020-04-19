@@ -1,9 +1,9 @@
 <?php
 
-include_once '../../../../Imports/session_manager/session_setup.php';
-include_once '../../../../Imports/DB/Database_conn.php';
-//include_once '../../../../Imports/audit/add_data.php';
-//include_once '../../../../Imports/notification/add_data.php';
+include_once '../../../Imports/session_manager/session_setup.php';
+include_once '../../../Imports/DB/Database_conn.php';
+//include_once '../../../Imports/audit/add_data.php';
+//include_once '../../../Imports/notification/add_data.php';
 
 $sub_id = isset($_POST['sub_id']) ? $_POST['sub_id'] : $audit_error;
 

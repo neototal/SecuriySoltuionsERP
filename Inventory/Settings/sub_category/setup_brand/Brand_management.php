@@ -182,6 +182,9 @@ $_SESSION['page_id'] = "03_01_01";
 
                         var button_update = document.createElement("button");
                         button_update.setAttribute("class", "w3-button w3-theme-dark w3-round w3-input w3-hover-blue-grey");
+                        button_update.addEventListener("click", function () {
+                            procee_modal(id, name, image_url, date_of_start, showing_web, true);
+                        });
 
                         var span_button_update = document.createElement("span");
                         span_button_update.setAttribute("class", "fa fa-pencil-square-o");
@@ -191,31 +194,49 @@ $_SESSION['page_id'] = "03_01_01";
                         span_button_lable_update.setAttribute("class", "w3-text w3-tag w3-small w3-theme-dark w3-padding-8 w3-center");
                         span_button_lable_update.appendChild(document.createTextNode("update"));
 
-                        div_col_03.appendChild(button_update);
-                        div_col_03.appendChild(span_button_lable_update);
-                        div_row.appendChild(div_col_03)
+//                        div_col_03.appendChild(button_update);
+//                        div_col_03.appendChild(span_button_lable_update);
+//                        div_row.appendChild(div_col_03)
 
 
                         var div_col_04 = document.createElement("div");
-                        div_col_04.setAttribute("class", "col-lg-1 w3-padding w3-tooltip");
+                        div_col_04.setAttribute("class", "col-lg-2 w3-padding w3-tooltip w3-center");
 
                         var button_del = document.createElement("button");
-                        button_del.setAttribute("class", "w3-button w3-theme-dark w3-round w3-input w3-hover-blue-grey w3-red");
+                        button_del.setAttribute("class", "w3-button w3-theme-dark w3-round w3-hover-blue-grey w3-red");
+                        button_del.addEventListener("click", function () {
+                            if(confirm("Do you want to remove from "+ document.getElementById("sub_cat_name").innerHTML)){
+                                remove_brand(id);
+                                
+                            }
+                        });
 
                         var span_button_del = document.createElement("span");
                         span_button_del.setAttribute("class", "fa fa-trash-o");
                         button_del.appendChild(span_button_del);
 
                         var span_button_lable_del = document.createElement("span");
-                        span_button_lable_del.setAttribute("class", "w3-text w3-tag w3-small w3-theme-dark w3-padding-8 w3-center");
-                        span_button_lable_del.appendChild(document.createTextNode("remove"));
+                        span_button_lable_del.setAttribute("class", "w3-text w3-tag w3-small w3-red w3-padding-8 w3-center");
+                        span_button_lable_del.appendChild(document.createTextNode("remove from " + document.getElementById("sub_cat_name").innerHTML));
+                        span_button_lable_del.style.width = "100%";
 
                         div_col_04.appendChild(button_del);
                         div_col_04.appendChild(span_button_lable_del);
                         div_row.appendChild(div_col_04)
                     }
 
-
+                    function remove_brand(id) {
+                        var sending_value = "id=" + id + "&main_cat=" + document.getElementById("sub_cat_name").innerHTML;
+                        $.ajax({
+                            url: "Brand_management/del_brand_from_cat.php",
+                            type: 'POST',
+                            data: sending_value,
+                            cache: false,
+                            success: function (data) {
+                                load_data();
+                            }
+                        });
+                    }
 
                 </script>
                 <div class="row w3-border-bottom w3-border-top w3-border-theme w3-padding">
@@ -239,6 +260,7 @@ $_SESSION['page_id'] = "03_01_01";
                 </div>
             </div>
         </div>
+    </div>
 
         <?php
         include_once './Brand_management/modal/barnd_management.php';

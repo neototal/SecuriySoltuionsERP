@@ -23,3 +23,5 @@ function setup_notification_update_data($page_id, $data_array) {
 function setup_notification_del_data($page_id, $data_array) {
     
 }
+
+function setup_error_msg($page_id,$error_page_location){}
