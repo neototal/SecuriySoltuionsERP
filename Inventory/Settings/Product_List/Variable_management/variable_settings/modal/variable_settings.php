@@ -54,6 +54,9 @@
         div_contaner.appendChild(row_01);
         div_contaner.appendChild(table_body)
         modal_body.appendChild(div_contaner);
+        var modal_footer = document.getElementById("modal_footer");
+        $(modal_footer).empty();
+
     }
     function load_variable_cat_data(search_value, table_body) {
         $(table_body).empty();
@@ -476,17 +479,8 @@
                 success: function (data) {
                     if (!isNaN(data)) {
                         if (state_of_advance == "1") {
-                            if (data_type == "Multiple Selections") {
-                                Multiple_Selections(data);
-                            } else if (data_type == "Drop Down List") {
-                                Drop_Down_List(data);
-                            } else if (data_type == "Upload Files") {
-                                Upload_Files(data);
-                            } else if (data_type == "Date Types") {
-                                Date_Types(data);
-                            } else {
-                                $("#myModal").modal('hide');
-                            }
+//                            alert('test');
+                            advance_setting_from(data, name_txt_obj.value, type_id, data_type, cat_id, cat_name);
                         } else {
                             $("#myModal").modal('hide');
                         }
@@ -502,48 +496,49 @@
 //        data_type_list[6] = "Upload Files";
 //        data_type_list[7] = "Date Types";
 ////        data_type_list[8] = "Product Icon";
-    function Multiple_Selections(id) {
+
+    function advance_setting_from(id_of_product_variable, product_variable_name, data_type_id, data_type_name, cat_id, cat_name) {
+//        alert(id_of_product_variable);
         var modal_head = document.getElementById("modal_head");
         $(modal_head).empty();
+        modal_head.appendChild(document.createTextNode("Setting of variable " + product_variable_name + " - " + data_type_name));
 
         var modal_body = document.getElementById("modal_body");
         $(modal_body).empty();
 
         var modal_footer = document.getElementById("modal_footer");
         $(modal_footer).empty();
+
+
+
+
+        if (data_type_name == "Multiple Selections") {
+            Multiple_Selections(id_of_product_variable, product_variable_name, data_type_id, data_type_name, cat_id, cat_name);
+        } else if (data_type_name == "Drop Down List") {
+            Drop_Down_List(id_of_product_variable, product_variable_name, data_type_id, data_type_name, cat_id, cat_name);
+        } else if (data_type_name == "Upload Files") {
+            Upload_Files(id_of_product_variable, product_variable_name, data_type_id, data_type_name, cat_id, cat_name);
+        } else if (data_type_name == "Date Types") {
+            Date_Types(id_of_product_variable, product_variable_name, data_type_id, data_type_name, cat_id, cat_name);
+        } else {
+            $("#myModal").modal('hide');
+        }
+    }
+
+    function Multiple_Selections(id_of_product_variable, product_variable_name, data_type_id, data_type_name, cat_id, cat_name) {
+
 
     }
-    function Drop_Down_List(id) {
-        var modal_head = document.getElementById("modal_head");
-        $(modal_head).empty();
+    function Drop_Down_List(id_of_product_variable, product_variable_name, data_type_id, data_type_name, cat_id, cat_name) {
 
-        var modal_body = document.getElementById("modal_body");
-        $(modal_body).empty();
-
-        var modal_footer = document.getElementById("modal_footer");
-        $(modal_footer).empty();
 
     }
-    function Upload_Files(id) {
-        var modal_head = document.getElementById("modal_head");
-        $(modal_head).empty();
+    function Upload_Files(id_of_product_variable, product_variable_name, data_type_id, data_type_name, cat_id, cat_name) {
 
-        var modal_body = document.getElementById("modal_body");
-        $(modal_body).empty();
-
-        var modal_footer = document.getElementById("modal_footer");
-        $(modal_footer).empty();
 
     }
-    function Date_Types(id) {
-        var modal_head = document.getElementById("modal_head");
-        $(modal_head).empty();
+    function Date_Types(id_of_product_variable, product_variable_name, data_type_id, data_type_name, cat_id, cat_name) {
 
-        var modal_body = document.getElementById("modal_body");
-        $(modal_body).empty();
-
-        var modal_footer = document.getElementById("modal_footer");
-        $(modal_footer).empty();
 
     }
 
