@@ -66,7 +66,7 @@ $_SESSION['page_id'] = "000003_0001";
 
         </script>
     </head>
-    <body>
+    <body class="w3-theme-light">
         <?php
         include_once '../../../../Imports/menu/main_menue.php';
         ?>

@@ -476,7 +476,17 @@
                 success: function (data) {
                     if (!isNaN(data)) {
                         if (state_of_advance == "1") {
-
+                            if (data_type == "Multiple Selections") {
+                                Multiple_Selections(data);
+                            } else if (data_type == "Drop Down List") {
+                                Drop_Down_List(data);
+                            } else if (data_type == "Upload Files") {
+                                Upload_Files(data);
+                            } else if (data_type == "Date Types") {
+                                Date_Types(data);
+                            } else {
+                                $("#myModal").modal('hide');
+                            }
                         } else {
                             $("#myModal").modal('hide');
                         }
@@ -485,16 +495,58 @@
                     }
                 }
             });
-
-//            if (data_type == "Number Fromat" || data_type == "Small Text Fromat" || data_type == "Large Text Fromat" || data_type == "Yes / No" || data_type == "Date Types") {
-//            } else if (data_type == "Multiple Selections") {
-//            } else if (data_type == "Drop Down List") {
-//            } else if (data_type == "Upload Files") {
-//            } else if (data_type == "Date Types") {
-//            }
-
         }
     }
+//    data_type_list[4] = "Multiple Selections";
+//        data_type_list[5] = "Drop Down List";
+//        data_type_list[6] = "Upload Files";
+//        data_type_list[7] = "Date Types";
+////        data_type_list[8] = "Product Icon";
+    function Multiple_Selections(id) {
+        var modal_head = document.getElementById("modal_head");
+        $(modal_head).empty();
+
+        var modal_body = document.getElementById("modal_body");
+        $(modal_body).empty();
+
+        var modal_footer = document.getElementById("modal_footer");
+        $(modal_footer).empty();
+
+    }
+    function Drop_Down_List(id) {
+        var modal_head = document.getElementById("modal_head");
+        $(modal_head).empty();
+
+        var modal_body = document.getElementById("modal_body");
+        $(modal_body).empty();
+
+        var modal_footer = document.getElementById("modal_footer");
+        $(modal_footer).empty();
+
+    }
+    function Upload_Files(id) {
+        var modal_head = document.getElementById("modal_head");
+        $(modal_head).empty();
+
+        var modal_body = document.getElementById("modal_body");
+        $(modal_body).empty();
+
+        var modal_footer = document.getElementById("modal_footer");
+        $(modal_footer).empty();
+
+    }
+    function Date_Types(id) {
+        var modal_head = document.getElementById("modal_head");
+        $(modal_head).empty();
+
+        var modal_body = document.getElementById("modal_body");
+        $(modal_body).empty();
+
+        var modal_footer = document.getElementById("modal_footer");
+        $(modal_footer).empty();
+
+    }
+
 
 </script>
 <!-- Modal -->
