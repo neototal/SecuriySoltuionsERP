@@ -27,7 +27,11 @@ $sql_query = "insert into sub_main_category(name,dis,show_in_web,main_category_i
 
     $database_connction = database();
     $database_connction->query($sql_query);
-    echo $database_connction->error;
+    if($database_connction->error==""){
+        echo 'false';
+    }else{
+        echo $database_connction->error;
+    }
 }else{
     include_once '../../../Imports/audit/system_error.php';
 }

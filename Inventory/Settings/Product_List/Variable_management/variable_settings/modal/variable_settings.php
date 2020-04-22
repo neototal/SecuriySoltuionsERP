@@ -198,7 +198,7 @@
                 cache: false,
                 success: function (data) {
                     if (!isNaN(data)) {
-                        select_data_type_of_variable(data, name_of_cat_obj);
+                        select_data_type_of_variable(data, name_of_cat_obj.value);
                     } else {
                         error_id_obj.appendChild(document.createTextNode(data));
                     }
@@ -434,7 +434,7 @@
             name_txt_obj.setAttribute("class", "w3-input w3-red w3-border w3-border-black");
             error_obj.appendChild(document.createTextNode("name field cant be empty to continue"));
         } else {
-            var requard_id = 0, show_on_web_id = 0, show_on_invoice = 0, show_on_estimate = 0;
+            var requard_id = 0, show_on_web_id = 0, show_on_invoice = 0, show_on_estimate_id = 0;
             if (requard_check_obj.checked) {
                 requard_id = 1;
             }
@@ -445,10 +445,21 @@
                 show_on_invoice = 1;
             }
             if (check_show_on_estimate_obj.checked) {
-                show_on_estimate = 1;
+                show_on_estimate_id = 1;
             }
 
-            var sending_value = "";
+            var sending_value = "id_cat=" + cat_id + "&cat_name=" + cat_name + "&data_type_id=" + type_id + "&data_type=" + data_type + "&name_of_variable=" + name_txt_obj.value +
+                    "&req=" + requard_id + "&web=" + show_on_web_id + "&invoice=" + show_on_invoice + "&estimate=" + show_on_estimate_id;
+            alert(sending_value);
+            $.ajax({
+                url: "variable_settings/add_variable.php",
+                type: 'POST',
+                data: sending_value,
+                cache: false,
+                success: function (data) {
+                    alert(data);
+                }
+            });
 
             if (data_type == "Number Fromat" || data_type == "Small Text Fromat" || data_type == "Large Text Fromat" || data_type == "Yes / No" || data_type == "Date Types") {
             } else if (data_type == "Multiple Selections") {

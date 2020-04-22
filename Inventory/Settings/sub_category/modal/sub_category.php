@@ -4,17 +4,17 @@
         set_up_modal("", "", "", 0, false);
     }
     function set_up_modal(id, name, dis, show_on_web, state_of_update) {
-        
+
         var modal_head = document.getElementById("modal_head");
         $(modal_head).empty();
         var breadcrumb_data = document.getElementById("breadcrumb_data");
         $(breadcrumb_data).empty();
-        
+
         var head_text = "Add Sub Category to " + document.getElementById("sub_cat_name").innerHTML;
         if (state_of_update) {
             head_text = "Update " + name + " Sub Category";
         }
-        
+
         modal_head.appendChild(document.createTextNode(head_text));
         breadcrumb_data.appendChild(document.createTextNode(head_text));
 
@@ -201,8 +201,9 @@
                 data: sending_value,
                 cache: false,
                 success: function (data) {
-                    
-                    if (data == "") {
+
+                    if (data != "false") {
+
                         $("#myModal").modal('hide');
                         load_data();
                     } else {

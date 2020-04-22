@@ -135,12 +135,14 @@ $_SESSION['page_id'] = "03_01_01";
                         div_col_01.setAttribute("class", "col-lg-4 w3-center");
                         var img_brand = document.createElement("img");
                         img_brand.setAttribute("class", "w3-img");
+                        
                         if (image_url == "") {
                             img_brand.setAttribute("src", "<?php echo$pth; ?>Imports/img/Settings/not_found.png");
                         } else {
                             img_brand.setAttribute("src", "<?php echo$pth; ?>" + image_url);
                         }
-                        img_brand.style.width = "150px";
+                        img_brand.style.width = "100%";
+                        img_brand.style.height="200px";
                         div_col_01.appendChild(img_brand);
                         div_row.appendChild(div_col_01);
 
