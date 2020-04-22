@@ -17,7 +17,7 @@ $show_on_web = isset($_POST['show_on_web']) ? $_POST['show_on_web'] : $aduit_err
 $data_array = array();
 $data_array['name_label'] = $main_category_name . " of sub category ";
 $data_array['name_value'] = $name;
-if ((isset($userid) || isset($id_of_main_category) || isset($name))) {
+if ((isset($userid) && isset($id_of_main_category) && isset($name))) {
 setup_notification_add_new_data(isset($_SESSION['page_id']) ? $_SESSION['page_id'] : $aduit_error, $data_array);
 setup_notification_add_new_data(isset($_SESSION['page_id']) ? $_SESSION['page_id'] : $aduit_error, $data_array);
 

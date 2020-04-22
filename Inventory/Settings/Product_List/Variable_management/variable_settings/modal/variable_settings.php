@@ -100,7 +100,7 @@
         col_02.appendChild(btn_add);
 
         btn_add.addEventListener("click", function () {
-            select_data_type_of_variable(id, cat_name);
+            select_data_type_of_variable(id, cat_name, table_body);
         });
 
         row.appendChild(col_01);
@@ -198,7 +198,7 @@
                 cache: false,
                 success: function (data) {
                     if (!isNaN(data)) {
-                        select_data_type_of_variable(data, name_of_cat_obj.value);
+                        select_data_type_of_variable(data, name_of_cat_obj.value, error_id_obj);
                     } else {
                         error_id_obj.appendChild(document.createTextNode(data));
                     }
@@ -212,7 +212,7 @@
         $(error_id).empty();
     }
 
-    function select_data_type_of_variable(id_of_cat, cat_name) {
+    function select_data_type_of_variable(id_of_cat, cat_name, error_id_obj) {
         var modal_head = document.getElementById("modal_head");
         $(modal_head).empty();
 
@@ -223,23 +223,41 @@
         $(modal_footer).empty();
 
         modal_head.appendChild(document.createTextNode("Select data type to " + cat_name));
-        var data_type_list = new Array();
-        data_type_list[0] = "Number Fromat";
-        data_type_list[1] = "Small Text Fromat";
-        data_type_list[2] = "Large Text Fromat";
-        data_type_list[3] = "Yes / No";
-        data_type_list[4] = "Multiple Selections";
-        data_type_list[5] = "Drop Down List";
-        data_type_list[6] = "Upload Files";
-        data_type_list[7] = "Date Types";
-//        data_type_list[8] = "Product Icon";
+
+        $.ajax({
+            url: "variable_settings/load_dataTypes.php",
+            type: 'POST',
+            cache: false,
+            success: function (data) {
+                var json = eval(data);
+                for (var i = 0; i < json.length; i++) {
+                    data_type_listing(json[i].idtype_of_variables, json[i].name, json[i].advance_settings, id_of_cat, cat_name, modal_body);
+                }
+                if (json.length == 0) {
+                    error_id_obj.appendChild(document.createTextNode("refresh your page please "));
+                }
+
+            }
+        });
+
+
+//        var data_type_list = new Array();
+//        data_type_list[0] = "Number Fromat";
+//        data_type_list[1] = "Small Text Fromat";
+//        data_type_list[2] = "Large Text Fromat";
+//        data_type_list[3] = "Yes / No";
+//        data_type_list[4] = "Multiple Selections";
+//        data_type_list[5] = "Drop Down List";
+//        data_type_list[6] = "Upload Files";
+//        data_type_list[7] = "Date Types";
+////        data_type_list[8] = "Product Icon";
 
         modal_body.appendChild(document.createElement("hr"));
-        for (var i = 0; i < data_type_list.length; i++) {
-            data_type_listing(i, data_type_list[i], id_of_cat, cat_name, modal_body);
-        }
+//        for (var i = 0; i < data_type_list.length; i++) {
+//            data_type_listing(i, data_type_list[i], id_of_cat, cat_name, modal_body);
+//        }
     }
-    function data_type_listing(id, data_type_name, cat_id, cat_name, table_body) {
+    function data_type_listing(id, data_type_name, state_of_advance, cat_id, cat_name, table_body) {
         var row = document.createElement("div");
         row.setAttribute("class", "row");
 
@@ -257,7 +275,7 @@
         col_02.appendChild(btn_add);
 
         btn_add.addEventListener("click", function () {
-            single_value_format(cat_id, id, cat_name, data_type_name);
+            single_value_format(cat_id, id, cat_name, data_type_name, state_of_advance);
         });
 
         row.appendChild(col_01);
@@ -266,7 +284,7 @@
         table_body.appendChild(document.createElement("hr"));
 
     }
-    function single_value_format(type_id, id_of_cat, cat_name, data_type) {
+    function single_value_format(type_id, id_of_cat, cat_name, data_type, state_of_advance) {
         var modal_head = document.getElementById("modal_head");
         $(modal_head).empty();
 
@@ -422,14 +440,14 @@
 
 
         button_add.addEventListener("click", function () {
-            add_data(type_id, id_of_cat, cat_name, data_type, input_text, check_req, check_show_on_web, check_show_on_invoice, check_show_on_estimate, error_id);
+            add_data(type_id, id_of_cat, cat_name, data_type, input_text, check_req, check_show_on_web, check_show_on_invoice, check_show_on_estimate, error_id, state_of_advance);
         });
         input_text.addEventListener("keydown", function () {
             error_remove(this, error_id);
         });
 
     }
-    function add_data(type_id, cat_id, cat_name, data_type, name_txt_obj, requard_check_obj, check_show_on_web_obj, check_show_on_invoice_obj, check_show_on_estimate_obj, error_obj) {
+    function add_data(type_id, cat_id, cat_name, data_type, name_txt_obj, requard_check_obj, check_show_on_web_obj, check_show_on_invoice_obj, check_show_on_estimate_obj, error_obj, state_of_advance) {
         if (name_txt_obj.value == "") {
             name_txt_obj.setAttribute("class", "w3-input w3-red w3-border w3-border-black");
             error_obj.appendChild(document.createTextNode("name field cant be empty to continue"));
@@ -449,24 +467,31 @@
             }
 
             var sending_value = "id_cat=" + cat_id + "&cat_name=" + cat_name + "&data_type_id=" + type_id + "&data_type=" + data_type + "&name_of_variable=" + name_txt_obj.value +
-                    "&req=" + requard_id + "&web=" + show_on_web_id + "&invoice=" + show_on_invoice + "&estimate=" + show_on_estimate_id;
-            alert(sending_value);
+                    "&req=" + requard_id + "&web=" + show_on_web_id + "&invoice=" + show_on_invoice + "&estimate=" + show_on_estimate_id + "&state_of_advance=" + state_of_advance;
             $.ajax({
                 url: "variable_settings/add_variable.php",
                 type: 'POST',
                 data: sending_value,
                 cache: false,
                 success: function (data) {
-                    alert(data);
+                    if (!isNaN(data)) {
+                        if (state_of_advance == "1") {
+
+                        } else {
+                            $("#myModal").modal('hide');
+                        }
+                    } else {
+                        error_obj.appendChild(document.createTextNode(data));
+                    }
                 }
             });
 
-            if (data_type == "Number Fromat" || data_type == "Small Text Fromat" || data_type == "Large Text Fromat" || data_type == "Yes / No" || data_type == "Date Types") {
-            } else if (data_type == "Multiple Selections") {
-            } else if (data_type == "Drop Down List") {
-            } else if (data_type == "Upload Files") {
-            } else if (data_type == "Date Types") {
-            }
+//            if (data_type == "Number Fromat" || data_type == "Small Text Fromat" || data_type == "Large Text Fromat" || data_type == "Yes / No" || data_type == "Date Types") {
+//            } else if (data_type == "Multiple Selections") {
+//            } else if (data_type == "Drop Down List") {
+//            } else if (data_type == "Upload Files") {
+//            } else if (data_type == "Date Types") {
+//            }
 
         }
     }

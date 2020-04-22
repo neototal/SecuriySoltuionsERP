@@ -29,7 +29,7 @@ $page_id = isset($_SESSION['page_id']) ? $_SESSION['page_id'] : $audit_error;
 $main_category_id = isset($_SESSION['data_id']) ? $_SESSION['data_id'] : $audit_error;
 
 
-if ((isset($name) || isset($main_category_id)||isset($userid))) {
+if ((isset($name) && isset($main_category_id)&&isset($userid))) {
     setup_audit_data_new_data($page_id, $data_array);
     setup_notification_add_new_data($page_id, $data_array);
 

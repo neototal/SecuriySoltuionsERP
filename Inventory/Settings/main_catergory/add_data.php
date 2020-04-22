@@ -21,7 +21,7 @@ $show_on_web = isset($_POST['show_on_web']) ? $_POST['show_on_web'] : $audit_err
 $audit_record_array = array();
 $audit_record_array["name _value"] = $name;
 $audit_record_array["name_label"] = "Main Category";
-if ((isset($name) || isset($userid))) {
+if ((isset($name) && isset($userid))) {
     setup_audit_data_new_data(isset($_SESSION['page_id']) ? $_SESSION['page_id'] : "not found", $audit_record_array);
 
     setup_notification_add_new_data(isset($_SESSION['page_id']) ? $_SESSION['page_id'] : "not found", $audit_record_array);
