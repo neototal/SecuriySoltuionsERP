@@ -232,6 +232,7 @@
             type: 'POST',
             cache: false,
             success: function (data) {
+//                alert(data);
                 var json = eval(data);
                 for (var i = 0; i < json.length; i++) {
                     data_type_listing(json[i].idtype_of_variables, json[i].name, json[i].advance_settings, id_of_cat, cat_name, modal_body);
@@ -243,22 +244,8 @@
             }
         });
 
-
-//        var data_type_list = new Array();
-//        data_type_list[0] = "Number Fromat";
-//        data_type_list[1] = "Small Text Fromat";
-//        data_type_list[2] = "Large Text Fromat";
-//        data_type_list[3] = "Yes / No";
-//        data_type_list[4] = "Multiple Selections";
-//        data_type_list[5] = "Drop Down List";
-//        data_type_list[6] = "Upload Files";
-//        data_type_list[7] = "Date Types";
-////        data_type_list[8] = "Product Icon";
-
         modal_body.appendChild(document.createElement("hr"));
-//        for (var i = 0; i < data_type_list.length; i++) {
-//            data_type_listing(i, data_type_list[i], id_of_cat, cat_name, modal_body);
-//        }
+
     }
     function data_type_listing(id, data_type_name, state_of_advance, cat_id, cat_name, table_body) {
         var row = document.createElement("div");
@@ -513,31 +500,224 @@
 
 
         if (data_type_name == "Multiple Selections") {
-            Multiple_Selections(id_of_product_variable, product_variable_name, data_type_id, data_type_name, cat_id, cat_name);
+            Multiple_Selections(id_of_product_variable, product_variable_name, data_type_id, data_type_name, cat_id, cat_name, modal_body, modal_footer);
         } else if (data_type_name == "Drop Down List") {
-            Drop_Down_List(id_of_product_variable, product_variable_name, data_type_id, data_type_name, cat_id, cat_name);
+            Drop_Down_List(id_of_product_variable, product_variable_name, data_type_id, data_type_name, cat_id, cat_name, modal_body, modal_footer);
         } else if (data_type_name == "Upload Files") {
-            Upload_Files(id_of_product_variable, product_variable_name, data_type_id, data_type_name, cat_id, cat_name);
+            Upload_Files(id_of_product_variable, product_variable_name, data_type_id, data_type_name, cat_id, cat_name, modal_body, modal_footer);
         } else if (data_type_name == "Date Types") {
-            Date_Types(id_of_product_variable, product_variable_name, data_type_id, data_type_name, cat_id, cat_name);
+            Date_Types(id_of_product_variable, product_variable_name, data_type_id, data_type_name, cat_id, cat_name, modal_body, modal_footer);
         } else {
             $("#myModal").modal('hide');
         }
     }
 
-    function Multiple_Selections(id_of_product_variable, product_variable_name, data_type_id, data_type_name, cat_id, cat_name) {
+    function Multiple_Selections(id_of_product_variable, product_variable_name, data_type_id, data_type_name, cat_id, cat_name, modal_body, modal_footer) {
+        $(modal_body).empty();
+        var contaner = document.createElement("div");
+        contaner.setAttribute("class", "container-fluid");
+
+        var a_row = document.createElement("div");
+        a_row.setAttribute("class", "row");
+
+        var a_col_01 = document.createElement("div");
+        a_col_01.setAttribute("class", "col-lg-8");
+        var a_search_text = document.createElement("input");
+        a_search_text.setAttribute("class", "w3-input w3-border w3-border-black");
+        a_search_text.setAttribute("placeholder", "search from hear");
+        a_col_01.appendChild(a_search_text)
+
+        var a_col_02 = document.createElement("div");
+        a_col_02.setAttribute("class", "col-lg-4");
+
+        var a_add_new = document.createElement("button");
+        a_add_new.setAttribute("class", "w3-input w3-button w3-theme-dark w3-hover-blue-grey");
+        a_add_new.appendChild(document.createTextNode("Add"));
+        a_add_new.addEventListener("click", function () {
+            Multiple_Selections_add_new(id_of_product_variable, product_variable_name, data_type_id, data_type_name, cat_id, cat_name, modal_body, modal_footer);
+        });
+        a_col_02.appendChild(a_add_new);
+
+        a_row.appendChild(a_col_01);
+        a_row.appendChild(a_col_02);
+        contaner.appendChild(a_row);
+
+
+        var table_body = document.createElement("div");
+        table_body.setAttribute("class", "w3-margin-top");
+
+        Multiple_Selections_load_data(a_search_text.value, id_of_product_variable, table_body);
+
+        contaner.appendChild(table_body);
+        modal_body.appendChild(contaner);
+
+    }
+
+    function Multiple_Selections_load_data(sending_value, id_of_product_variable, table_body) {
+        $(table_body).empty();
+        table_body.setAttribute("class", "container-fluid w3-margin-top");
+        table_body.appendChild(document.createElement("hr"));
+
+        var sending_value = "id_product=" + id_of_product_variable + "&value=" + sending_value;
+//        alert(sending_value);
+        $.ajax({
+            url: "variable_settings/load_multiple.php",
+            type: 'POST',
+            data: sending_value,
+            cache: false,
+            success: function (data) {
+//                alert(data);
+                var json = eval(data);
+                for (var i = 0; i < json.length; i++) {
+                    Multiple_Selections_load_data_table(json[i].id_value, json[i].value_of_multiple, json[i].img_pth, table_body);
+                }
+                if (json.length == 0) {
+                    table_body.setAttribute("class", "w3-center w3-padding");
+                    table_body.appendChild(document.createTextNode("data not found"));
+                }else{
+                    
+                }
+
+            }
+        });
+    }
+    function Multiple_Selections_load_data_table(id, name, img_pth, table_body) {
+        var div_row = document.createElement("div");
+        div_row.setAttribute("class", "row");
+
+        var div_col_01 = document.createElement("div");
+        div_col_01.setAttribute("class", "col-lg-2");
+        var image = document.createElement("img");
+        image.style.width = "80px";
+        if (img_pth == "") {
+            image.setAttribute("src", "<?php echo $pth; ?>Imports/img/Settings/not_found.png");
+        } else {
+            image.setAttribute("src", "<?php echo $pth; ?>" + img_pth);
+        }
+        div_col_01.appendChild(image);
+
+
+        var div_col_02 = document.createElement("div");
+        div_col_02.setAttribute("class", "col-lg-8");
+        div_col_02.appendChild(document.createTextNode(name));
+
+
+        var div_col_03 = document.createElement("div");
+        div_col_03.setAttribute("class", "col-lg-2 w3-center");
+
+        var btn = document.createElement("button");
+        btn.setAttribute("class", "w3-button w3-red w3-round w3-input w3-hover-blue-grey delete_record");
+        var span = document.createElement("span");
+        span.setAttribute("class", "fa fa-trash-o");
+        btn.appendChild(span);
+        div_col_03.appendChild(btn)
+
+
+        div_row.appendChild(div_col_01);
+        div_row.appendChild(div_col_02);
+        div_row.appendChild(div_col_03);
+        table_body.appendChild(div_row);
+        table_body.appendChild(document.createElement("hr"));
+
+    }
+
+    function Multiple_Selections_add_new(id_of_product_variable, product_variable_name, data_type_id, data_type_name, cat_id, cat_name, modal_body, modal_footer) {
+        $(modal_body).empty();
+        var contaner = document.createElement("div");
+        contaner.setAttribute("class", "container-fluid");
+
+        var a_row = document.createElement("div");
+        a_row.setAttribute("class", "row");
+
+        var a_col_01 = document.createElement("div");
+        a_col_01.setAttribute("class", "col-lg-12");
+
+        var a_lable = document.createElement("lable");
+        a_lable.appendChild(document.createTextNode("Variable Name"));
+        var a_input = document.createElement("input");
+        a_input.setAttribute("class", "w3-input w3-border w3-border-black");
+        a_input.setAttribute("placeholder", "add new variable");
+        a_col_01.appendChild(a_lable);
+        a_col_01.appendChild(a_input);
+        a_row.appendChild(a_col_01);
+
+        //        -------------
+
+        var b_row = document.createElement("div");
+        b_row.setAttribute("class", "row");
+        var b_col_01 = document.createElement("div");
+        b_col_01.setAttribute("class", "col-lg-12");
+
+
+
+
+        b_row.appendChild(b_col_01);
+
+        //        -------------
+
+
+        var error_id = document.createElement("div");
+        error_id.setAttribute("class", "w3-text-red w3-center");
+//        -------------
+        var d_row = document.createElement("div");
+        d_row.setAttribute("class", "row");
+        var d_col_01 = document.createElement("div");
+        d_col_01.setAttribute("class", "col-lg-8");
+
+        var d_col_02 = document.createElement("div");
+        d_col_02.setAttribute("class", "col-lg-4");
+
+        var d_button = document.createElement("button");
+        d_button.setAttribute("class", "w3-input w3-button w3-theme-dark w3-hover-blue-grey w3-margin-top");
+        d_button.appendChild(document.createTextNode("Create"));
+        d_col_02.appendChild(d_button);
+        d_button.addEventListener("click", function () {
+            Multiple_Selections_create_new_value_save_to_Db(a_input, id_of_product_variable, product_variable_name, data_type_id, data_type_name, cat_id, cat_name, modal_body, modal_footer, error_id);
+        });
+
+        a_input.addEventListener("keydown", function () {
+            error_remove(a_input, error_id);
+        });
+
+        d_row.appendChild(d_col_01);
+        d_row.appendChild(d_col_02);
+
+        contaner.appendChild(a_row);
+        contaner.appendChild(b_row);
+        contaner.appendChild(error_id);
+        contaner.appendChild(d_row);
+
+        modal_body.appendChild(contaner);
+    }
+
+    function Multiple_Selections_create_new_value_save_to_Db(input_text_obj, id_of_product_variable, product_variable_name, data_type_id, data_type_name, cat_id, cat_name, modal_body, modal_footer, error_id) {
+        if (input_text_obj.value == "") {
+            error_id.appendChild(document.createTextNode("name field cant be empty"));
+            input_text_obj.setAttribute("class", "w3-red w3-input w3-border w3-border-black");
+        } else {
+            var sending_value = "id_product=" + id_of_product_variable + "&value=" + input_text_obj.value;
+            $.ajax({
+                url: "variable_settings/add_multiple_value_settings.php",
+                type: 'POST',
+                data: sending_value,
+                cache: false,
+                success: function (data) {
+                    Multiple_Selections(id_of_product_variable, product_variable_name, data_type_id, data_type_name, cat_id, cat_name, modal_body, modal_footer);
+                }
+            });
+
+        }
+    }
+
+    function Drop_Down_List(id_of_product_variable, product_variable_name, data_type_id, data_type_name, cat_id, cat_name, modal_body, modal_footer) {
 
 
     }
-    function Drop_Down_List(id_of_product_variable, product_variable_name, data_type_id, data_type_name, cat_id, cat_name) {
+    function Upload_Files(id_of_product_variable, product_variable_name, data_type_id, data_type_name, cat_id, cat_name, modal_body, modal_footer) {
 
 
     }
-    function Upload_Files(id_of_product_variable, product_variable_name, data_type_id, data_type_name, cat_id, cat_name) {
-
-
-    }
-    function Date_Types(id_of_product_variable, product_variable_name, data_type_id, data_type_name, cat_id, cat_name) {
+    function Date_Types(id_of_product_variable, product_variable_name, data_type_id, data_type_name, cat_id, cat_name, modal_body, modal_footer) {
 
 
     }
