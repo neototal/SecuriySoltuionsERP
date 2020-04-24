@@ -1,5 +1,7 @@
 <script type="text/javascript">
 
+
+
     function add_variable() {
         $("#myModal").modal('show');
         product_variable_cat();
@@ -10,10 +12,15 @@
         $(modal_head).empty();
         modal_head.appendChild(document.createTextNode("Select Variable Category"));
 
+        var image_uploader = document.getElementById("modal_body_image_uploder");
+        image_uploader.style.display = "none";
+
         var modal_body = document.getElementById("modal_body");
         $(modal_body).empty();
+        modal_body.scrollTop = "0";
+
         var div_contaner = document.createElement("div");
-        div_contaner.setAttribute("class", "container-fluid");
+//        div_contaner.setAttribute("class", "container-fluid");
 
         var row_01 = document.createElement("div");
         row_01.setAttribute("class", "row");
@@ -76,8 +83,10 @@
 //                    alert('test');
                     table_variable_cat(json[i].idproduct_variable_category, json[i].name, table_body);
                 }
-                if (json.length == 0) {
-                    add_new_variable_cat();
+                if (search_value != "") {
+                    if (json.length == 0) {
+                        add_new_variable_cat();
+                    }
                 }
             }
         });
@@ -120,9 +129,10 @@
 
         var modal_body = document.getElementById("modal_body");
         $(modal_body).empty();
+        modal_body.scrollTop = "0";
 
         var div_continer = document.createElement("div");
-        div_continer.setAttribute("class", "container-fluid");
+//        div_continer.setAttribute("class", "container-fluid");
 
         var row_01 = document.createElement("div");
         row_01.setAttribute("class", "row");
@@ -216,11 +226,13 @@
     }
 
     function select_data_type_of_variable(id_of_cat, cat_name, error_id_obj) {
+//        alert(id_of_cat+" "+cat_name+" "+error_id_obj);
         var modal_head = document.getElementById("modal_head");
         $(modal_head).empty();
 
         var modal_body = document.getElementById("modal_body");
         $(modal_body).empty();
+        modal_body.scrollTop = "0";
 
         var modal_footer = document.getElementById("modal_footer");
         $(modal_footer).empty();
@@ -282,6 +294,7 @@
 
         var modal_body = document.getElementById("modal_body");
         $(modal_body).empty();
+        modal_body.scrollTop = "0";
 
         var modal_footer = document.getElementById("modal_footer");
         $(modal_footer).empty();
@@ -442,6 +455,7 @@
             name_txt_obj.setAttribute("class", "w3-input w3-red w3-border w3-border-black");
             error_obj.appendChild(document.createTextNode("name field cant be empty to continue"));
         } else {
+
             var requard_id = 0, show_on_web_id = 0, show_on_invoice = 0, show_on_estimate_id = 0;
             if (requard_check_obj.checked) {
                 requard_id = 1;
@@ -492,7 +506,7 @@
 
         var modal_body = document.getElementById("modal_body");
         $(modal_body).empty();
-
+        modal_body.scrollTop = "0";
         var modal_footer = document.getElementById("modal_footer");
         $(modal_footer).empty();
 
@@ -500,9 +514,9 @@
 
 
         if (data_type_name == "Multiple Selections") {
-            Multiple_Selections(id_of_product_variable, product_variable_name, data_type_id, data_type_name, cat_id, cat_name, modal_body, modal_footer);
+            advance_setting_data_list(id_of_product_variable, product_variable_name, data_type_id, data_type_name, cat_id, cat_name, modal_body, modal_footer, 1);
         } else if (data_type_name == "Drop Down List") {
-            Drop_Down_List(id_of_product_variable, product_variable_name, data_type_id, data_type_name, cat_id, cat_name, modal_body, modal_footer);
+            advance_setting_data_list(id_of_product_variable, product_variable_name, data_type_id, data_type_name, cat_id, cat_name, modal_body, modal_footer, 2);
         } else if (data_type_name == "Upload Files") {
             Upload_Files(id_of_product_variable, product_variable_name, data_type_id, data_type_name, cat_id, cat_name, modal_body, modal_footer);
         } else if (data_type_name == "Date Types") {
@@ -512,10 +526,12 @@
         }
     }
 
-    function Multiple_Selections(id_of_product_variable, product_variable_name, data_type_id, data_type_name, cat_id, cat_name, modal_body, modal_footer) {
+    function advance_setting_data_list(id_of_product_variable, product_variable_name, data_type_id, data_type_name, cat_id, cat_name, modal_body, modal_footer, type_of_data) {
         $(modal_body).empty();
+        $(modal_footer).empty();
+        modal_body.scrollTop = "0";
         var contaner = document.createElement("div");
-        contaner.setAttribute("class", "container-fluid");
+//        contaner.setAttribute("class", "container-fluid");
 
         var a_row = document.createElement("div");
         a_row.setAttribute("class", "row");
@@ -534,7 +550,7 @@
         a_add_new.setAttribute("class", "w3-input w3-button w3-theme-dark w3-hover-blue-grey");
         a_add_new.appendChild(document.createTextNode("Add"));
         a_add_new.addEventListener("click", function () {
-            Multiple_Selections_add_new(id_of_product_variable, product_variable_name, data_type_id, data_type_name, cat_id, cat_name, modal_body, modal_footer);
+            advance_settings_add_new(id_of_product_variable, product_variable_name, data_type_id, data_type_name, cat_id, cat_name, modal_body, modal_footer, type_of_data);
         });
         a_col_02.appendChild(a_add_new);
 
@@ -546,16 +562,58 @@
         var table_body = document.createElement("div");
         table_body.setAttribute("class", "w3-margin-top");
 
-        Multiple_Selections_load_data(a_search_text.value, id_of_product_variable, table_body);
+        if (type_of_data == 1) {
+            Multiple_Selections_load_data(a_search_text.value, id_of_product_variable, table_body, modal_footer, type_of_data);
+        } else {
+            drop_down_load_data(a_search_text.value, id_of_product_variable, table_body, modal_footer, type_of_data);
+        }
 
         contaner.appendChild(table_body);
         modal_body.appendChild(contaner);
 
     }
-
-    function Multiple_Selections_load_data(sending_value, id_of_product_variable, table_body) {
+    function drop_down_load_data(sending_value, id_of_product_variable, table_body, modal_footer, type_of_data) {
         $(table_body).empty();
-        table_body.setAttribute("class", "container-fluid w3-margin-top");
+        $(modal_footer).empty();
+        table_body.setAttribute("class", "container-fluid");
+        table_body.appendChild(document.createElement("hr"));
+
+        var sending_value = "id_product=" + id_of_product_variable + "&value=" + sending_value;
+//        alert(sending_value);
+        $.ajax({
+            url: "variable_settings/load_drop_down.php",
+            type: 'POST',
+            data: sending_value,
+            cache: false,
+            success: function (data) {
+                alert(data);
+                var json = eval(data);
+                for (var i = 0; i < json.length; i++) {
+                    drop_down_load_data_table(json[i].id_value, json[i].value_of_dropdown, "", table_body, type_of_data);
+                }
+                if (json.length == 0) {
+                    table_body.setAttribute("class", "w3-center w3-padding");
+                    table_body.appendChild(document.createTextNode("data not found"));
+                } else {
+                    $(modal_footer).empty();
+                    var btn = document.createElement("button");
+                    btn.setAttribute("class", "w3-button w3-theme-dark w3-hover-blue-grey w3-margin-top");
+                    btn.style.width = "250px";
+                    btn.appendChild(document.createTextNode(" Finish "));
+                    modal_footer.appendChild(btn);
+                    btn.addEventListener("click", function () {
+                        $("#myModal").modal('hide');
+                    });
+                }
+
+            }
+        });
+    }
+
+    function Multiple_Selections_load_data(sending_value, id_of_product_variable, table_body, modal_footer, type_of_data) {
+        $(table_body).empty();
+        $(modal_footer).empty();
+        table_body.setAttribute("class", "container-fluid");
         table_body.appendChild(document.createElement("hr"));
 
         var sending_value = "id_product=" + id_of_product_variable + "&value=" + sending_value;
@@ -569,19 +627,61 @@
 //                alert(data);
                 var json = eval(data);
                 for (var i = 0; i < json.length; i++) {
-                    Multiple_Selections_load_data_table(json[i].id_value, json[i].value_of_multiple, json[i].img_pth, table_body);
+                    Multiple_Selections_load_data_table(json[i].id_value, json[i].value_of_multiple, json[i].img_pth, table_body, type_of_data);
                 }
                 if (json.length == 0) {
                     table_body.setAttribute("class", "w3-center w3-padding");
                     table_body.appendChild(document.createTextNode("data not found"));
-                }else{
-                    
+                } else {
+                    $(modal_footer).empty();
+                    var btn = document.createElement("button");
+                    btn.setAttribute("class", "w3-button w3-theme-dark w3-hover-blue-grey w3-margin-top");
+                    btn.style.width = "250px";
+                    btn.appendChild(document.createTextNode(" Finish "));
+                    modal_footer.appendChild(btn);
+                    btn.addEventListener("click", function () {
+                        $("#myModal").modal('hide');
+                    });
                 }
 
             }
         });
     }
-    function Multiple_Selections_load_data_table(id, name, img_pth, table_body) {
+    function drop_down_load_data_table(id, name, img_pth, table_body, type_of_data, type_of_data) {
+        var div_row = document.createElement("div");
+        div_row.setAttribute("class", "row");
+
+        var div_col_01 = document.createElement("div");
+        div_col_01.setAttribute("class", "col-lg-10");
+
+        var p_head = document.createElement("p");
+        p_head.setAttribute("class", "w3-padding");
+        p_head.appendChild(document.createTextNode(name));
+        div_col_01.appendChild(p_head);
+
+
+        var div_col_02 = document.createElement("div");
+        div_col_02.setAttribute("class", "col-lg-2 w3-center");
+
+        var btn = document.createElement("button");
+        btn.setAttribute("class", "w3-button w3-red w3-round w3-input w3-hover-blue-grey delete_record");
+        var span = document.createElement("span");
+        span.setAttribute("class", "fa fa-trash-o");
+        btn.appendChild(span);
+        div_col_02.appendChild(btn);
+
+        btn.addEventListener("click", function () {
+            alert('test');
+        });
+
+
+        div_row.appendChild(div_col_01);
+        div_row.appendChild(div_col_02);
+        table_body.appendChild(div_row);
+        table_body.appendChild(document.createElement("hr"));
+
+    }
+    function Multiple_Selections_load_data_table(id, name, img_pth, table_body, type_of_data, type_of_data) {
         var div_row = document.createElement("div");
         div_row.setAttribute("class", "row");
 
@@ -599,7 +699,11 @@
 
         var div_col_02 = document.createElement("div");
         div_col_02.setAttribute("class", "col-lg-8");
-        div_col_02.appendChild(document.createTextNode(name));
+
+        var p_head = document.createElement("p");
+        p_head.setAttribute("class", "w3-padding");
+        p_head.appendChild(document.createTextNode(name));
+        div_col_02.appendChild(p_head);
 
 
         var div_col_03 = document.createElement("div");
@@ -610,7 +714,11 @@
         var span = document.createElement("span");
         span.setAttribute("class", "fa fa-trash-o");
         btn.appendChild(span);
-        div_col_03.appendChild(btn)
+        div_col_03.appendChild(btn);
+
+        btn.addEventListener("click", function () {
+            alert('test');
+        });
 
 
         div_row.appendChild(div_col_01);
@@ -621,8 +729,9 @@
 
     }
 
-    function Multiple_Selections_add_new(id_of_product_variable, product_variable_name, data_type_id, data_type_name, cat_id, cat_name, modal_body, modal_footer) {
+    function advance_settings_add_new(id_of_product_variable, product_variable_name, data_type_id, data_type_name, cat_id, cat_name, modal_body, modal_footer, type_of_data) {
         $(modal_body).empty();
+        $(modal_footer).empty();
         var contaner = document.createElement("div");
         contaner.setAttribute("class", "container-fluid");
 
@@ -648,10 +757,15 @@
         var b_col_01 = document.createElement("div");
         b_col_01.setAttribute("class", "col-lg-12");
 
+        var image_uploader = document.getElementById("modal_body_image_uploder");
 
+        if (type_of_data == 1) {
+            image_uploader.style.display = "block";
+        } else {
+            image_uploader.style.display = "none";
+        }
 
-
-        b_row.appendChild(b_col_01);
+//        b_row.appendChild(b_col_01);
 
         //        -------------
 
@@ -672,7 +786,11 @@
         d_button.appendChild(document.createTextNode("Create"));
         d_col_02.appendChild(d_button);
         d_button.addEventListener("click", function () {
-            Multiple_Selections_create_new_value_save_to_Db(a_input, id_of_product_variable, product_variable_name, data_type_id, data_type_name, cat_id, cat_name, modal_body, modal_footer, error_id);
+            if (type_of_data == 1) {
+                Multiple_Selections_create_new_value_save_to_Db(a_input, id_of_product_variable, product_variable_name, data_type_id, data_type_name, cat_id, cat_name, modal_body, modal_footer, error_id, type_of_data);
+            } else {
+                drop_down_create_new_value_save_to_Db(a_input, id_of_product_variable, product_variable_name, data_type_id, data_type_name, cat_id, cat_name, modal_body, modal_footer, error_id, type_of_data);
+            }
         });
 
         a_input.addEventListener("keydown", function () {
@@ -683,30 +801,65 @@
         d_row.appendChild(d_col_02);
 
         contaner.appendChild(a_row);
+//        contaner.appendChild(document.createElement("hr"));
         contaner.appendChild(b_row);
         contaner.appendChild(error_id);
-        contaner.appendChild(d_row);
+        modal_footer.appendChild(d_row);
 
         modal_body.appendChild(contaner);
     }
 
-    function Multiple_Selections_create_new_value_save_to_Db(input_text_obj, id_of_product_variable, product_variable_name, data_type_id, data_type_name, cat_id, cat_name, modal_body, modal_footer, error_id) {
+
+    function Multiple_Selections_create_new_value_save_to_Db(input_text_obj, id_of_product_variable, product_variable_name, data_type_id, data_type_name, cat_id, cat_name, modal_body, modal_footer, error_id, type_of_data) {
         if (input_text_obj.value == "") {
             error_id.appendChild(document.createTextNode("name field cant be empty"));
             input_text_obj.setAttribute("class", "w3-red w3-input w3-border w3-border-black");
         } else {
             var sending_value = "id_product=" + id_of_product_variable + "&value=" + input_text_obj.value;
+
+            var modal_body_image_uploder = document.getElementById("modal_body_image_uploder");
+            modal_body_image_uploder.style.display = "none";
+
             $.ajax({
                 url: "variable_settings/add_multiple_value_settings.php",
                 type: 'POST',
                 data: sending_value,
                 cache: false,
                 success: function (data) {
-                    Multiple_Selections(id_of_product_variable, product_variable_name, data_type_id, data_type_name, cat_id, cat_name, modal_body, modal_footer);
+                    advance_setting_data_list(id_of_product_variable, product_variable_name, data_type_id, data_type_name, cat_id, cat_name, modal_body, modal_footer, type_of_data);
                 }
             });
 
         }
+    }
+
+    function drop_down_create_new_value_save_to_Db(input_text_obj, id_of_product_variable, product_variable_name, data_type_id, data_type_name, cat_id, cat_name, modal_body, modal_footer, error_id, type_of_data) {
+        if (input_text_obj.value == "") {
+            error_id.appendChild(document.createTextNode("name field cant be empty"));
+            input_text_obj.setAttribute("class", "w3-red w3-input w3-border w3-border-black");
+        } else {
+            var sending_value = "id_product=" + id_of_product_variable + "&value=" + input_text_obj.value;
+
+            var modal_body_image_uploder = document.getElementById("modal_body_image_uploder");
+            modal_body_image_uploder.style.display = "none";
+
+            $.ajax({
+                url: "variable_settings/add_drop_down_list.php",
+                type: 'POST',
+                data: sending_value,
+                cache: false,
+                success: function (data) {
+                    advance_setting_data_list(id_of_product_variable, product_variable_name, data_type_id, data_type_name, cat_id, cat_name, modal_body, modal_footer, type_of_data);
+                }
+            });
+
+        }
+    }
+
+    function close_modal() {
+//        $.ajax({
+//            url:"",
+//        });
     }
 
     function Drop_Down_List(id_of_product_variable, product_variable_name, data_type_id, data_type_name, cat_id, cat_name, modal_body, modal_footer) {
@@ -736,12 +889,135 @@
 
                 </h3>
             </div>
-            <div class="modal-body" id="modal_body">
-                <div class="container-fluid"></div>
-            </div>
-            <div class="modal-footer" id="modal_footer">
+            <div class="modal-body">
+                <div class="container-fluid" id="modal_body"></div>
+                <div id="modal_body_image_uploder" class="container-fluid" style="display: none;">
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <!--img-->
+                            <div id="targetLayer" class="w3-margin image-preview ">No Image</div>
+                        </div>
+                        <div class="col-lg-8">
+                            <div class="container-fluid w3-margin">
+                                <div class="row">
+                                    <div class="col-lg-12" id="change_btn">
+                                        <!--change btn-->
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-12" id="remove_btn">
+                                        <!--remove btn-->
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-12" id="add_btn">
+                                        <!--add btn-->
+                                        <form id="uploadForm" action="main_catergory/upload_image.php" method="post">
+                                            <div id="uploadFormLayer">
+                                                <input name="userImage" type="file" class="inputFile w3-input w3-theme-l4" required />
+                                                <input type="submit" class="w3-button w3-theme-dark w3-margin-top w3-input" value="Add Image">
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer" id="modal_footer">
 
+                </div>
             </div>
         </div>
     </div>
+
+
+    <div >
+        <div id="imageUploader" >
+
+        </div>
+    </div>
 </div>
+<script type="text/javascript">
+    $(document).ready(function (e) {
+        $("#uploadForm").on('submit', (function (e) {
+            e.preventDefault();
+            $.ajax({
+                url: "variable_settings/upload_img.php",
+                type: "POST",
+                data: new FormData(this),
+                contentType: false,
+                cache: false,
+                processData: false,
+                success: function (data)
+                {
+                    process_image(data);
+                },
+                error: function ()
+                {
+                }
+            });
+        }));
+    });
+
+    function process_image(img_pth) {
+        var upload_body = document.getElementById("add_btn");
+
+        var remove_btn = document.getElementById("remove_btn");
+        $(remove_btn).empty();
+        var change_btn = document.getElementById("change_btn");
+        $(change_btn).empty();
+
+        var image_body = document.getElementById("targetLayer");
+        $(image_body).empty();
+        var image = document.createElement("img");
+        image.setAttribute("src", "<?php echo $pth; ?>" + img_pth);
+        image_body.appendChild(image);
+        //        ---------------------------------------------------------------------
+
+        var btn_chage = document.createElement("button");
+        btn_chage.setAttribute("class", "w3-button w3-theme-dark w3-margin w3-input");
+        btn_chage.appendChild(document.createTextNode("Change Image"));
+        btn_chage.addEventListener("click", function () {
+            remove_img(false);
+
+        });
+
+
+        var btn_remove = document.createElement("button");
+        btn_remove.setAttribute("class", "w3-button w3-theme-dark w3-red w3-margin w3-input");
+        btn_remove.appendChild(document.createTextNode("Remove Image"));
+        btn_remove.addEventListener("click", function () {
+            remove_img(true);
+
+        }
+        );
+    }
+
+
+    function remove_img(state_remove_image) {
+        $.post("<?php echo $pth; ?>Imports/PHP_IO/img_del.php", function (data, state) {
+            var image_body = document.getElementById("targetLayer");
+            var upload_body = document.getElementById("add_btn");
+
+            var remove_btn = document.getElementById("remove_btn");
+            $(remove_btn).empty();
+            var change_btn = document.getElementById("change_btn");
+            $(change_btn).empty();
+
+
+            if (state_remove_image) {
+                image_body.style.display = "none";
+                upload_body.style.display = "none";
+            } else {
+                $(image_body).empty();
+                image_body.appendChild(document.createTextNode("Not Found"));
+                upload_body.style.display = "block";
+                image_body.style.display = "block";
+            }
+        });
+
+    }
+
+
+</script>

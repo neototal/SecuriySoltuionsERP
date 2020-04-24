@@ -30,8 +30,8 @@ function add_new() {
     array_push($sql_query_array, "INSERT INTO `type_of_variables` VALUES ('4', 'Yes / No', '1', now(), '0')");
     array_push($sql_query_array, "INSERT INTO `type_of_variables` VALUES ('5', 'Multiple Selections', '1', now(), '1')");
     array_push($sql_query_array, "INSERT INTO `type_of_variables` VALUES ('6', 'Drop Down List', '1', now(), '1')");
-    array_push($sql_query_array, "INSERT INTO `type_of_variables` VALUES ('7', 'Upload Files', '1', now(), '1')");
-    array_push($sql_query_array, "INSERT INTO `type_of_variables` VALUES ('8', 'Date Types', '1', now(), '0')");
+//    array_push($sql_query_array, "INSERT INTO `type_of_variables` VALUES ('7', 'Upload Files', '1', now(), '1')");
+//    array_push($sql_query_array, "INSERT INTO `type_of_variables` VALUES ('8', 'Date Types', '1', now(), '0')");
 
     for ($i = 0; $i < count($sql_query_array); $i++) {
         $database_connction->query($sql_query_array[$i]);
