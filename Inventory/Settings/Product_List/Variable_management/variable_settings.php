@@ -215,11 +215,63 @@ $_SESSION['page_id'] = "000003_0001";
                 container_fluid.appendChild(cat_row);
                 main_col.appendChild(container_fluid);
                 main_row.appendChild(main_col);
-                
-                
-                var 
 
                 modal_body_table.appendChild(main_row);
+
+
+                var preview_div = document.createElement("div");
+                preview_div.setAttribute("class", "row");
+                var preview_div_col = document.createElement("div");
+                preview_div_col.setAttribute("class", "col-lg-12");
+                preview_div.style.display = "none";
+
+                preview_div.appendChild(preview_div_col);
+                modal_body_table.appendChild(preview_div);
+
+                var settings_div = document.createElement("div");
+                settings_div.setAttribute("class", "row");
+                var settings_div_col=document.createElement("div");
+                settings_div_col.setAttribute("class","col-lg-12");
+                settings_div.style.display = "none";
+                
+                settings_div.appendChild(settings_div_col);
+                modal_body_table.appendChild(settings_div);
+                
+                
+                
+                
+                
+                btn_view.addEventListener("click",function(){
+                    preview_operation(cat_id,preview_div,settings_div);
+                });
+
+
+            }
+            function preview_operation(id,preview_div_obj,settings_div_obj){
+                $(preview_div_obj).empty();
+                $(settings_div_obj).empty();
+                
+                
+                var div_contaner=document.createElement("div");
+                div_contaner.setAttribute("class","container-fluid");
+                
+                var a_row=document.createElement("div");
+                a_row.setAttribute("class","row");
+                
+                var a_col_01=document.createElement("div");
+                a_col_01.setAttribute("class","col-lg-8");
+                
+                var a_col_02=document.createElement("div");
+                a_col_02.setAttribute("class","col-lg-3");
+                
+                var a_col_03=document.createElement("div");
+                a_col_03.setAttribute("class","col-lg-1");
+                
+                
+                
+                
+                
+                preview_div_obj.appendChild(div_contaner);
             }
         </script>
         <div class="container w3-theme-l4" id="modal_body_table">
