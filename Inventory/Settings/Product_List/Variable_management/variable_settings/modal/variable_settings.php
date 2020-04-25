@@ -970,10 +970,8 @@
 
         var image_body = document.getElementById("targetLayer");
         $(image_body).empty();
-        var image = document.createElement("img");
-        image.setAttribute("src", "<?php echo $pth; ?>" + img_pth);
-        image_body.appendChild(image);
-        //        ---------------------------------------------------------------------
+
+//        ---------------------------------------------------------------------
 
         var btn_chage = document.createElement("button");
         btn_chage.setAttribute("class", "w3-button w3-theme-dark w3-margin w3-input");
@@ -990,8 +988,27 @@
         btn_remove.addEventListener("click", function () {
             remove_img(true);
 
+        });
+
+
+//        ---------------------------------------------------------------------
+
+//        alert(img_pth);
+        if (img_pth == "") {
+            image_body.appendChild(document.createTextNode("No Image"));
+            upload_body.style.display = "block";
+            image_body.style.display = "block";
+        } else {
+            upload_body.style.display = "none";
+            image_body.style.display = "block";
+            var img = document.createElement("img");
+            img.setAttribute("src", "<?php echo $pth; ?>" + img_pth);
+            img.setAttribute("class", "image-preview");
+            image_body.appendChild(img);
+            change_btn.appendChild(btn_chage);
+            remove_btn.appendChild(btn_remove);
+
         }
-        );
     }
 
 
