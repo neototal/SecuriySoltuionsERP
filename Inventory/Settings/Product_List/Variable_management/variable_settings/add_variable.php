@@ -35,8 +35,9 @@ if (isset($id_cat) && isset($id_data_type) && isset($userid) && isset($compnay_d
 
     if (check_variable($id_cat, $id_data_type, $name_of_variable)) {
         $database_connction = database();
-        $sql_query = "insert into product_variable(name,requard_state,ast,sdt,sub_main_category_idsub_main_category,user_login_iduser_login,advance_settings,type_of_variables_idtype_of_variables,show_on_web,show_on_invoice,show_on_qutation) " .
-                "values('" . $name_of_variable . "','" . $chk_req . "','1',now(),'" . $sub_category_id . "','" . $userid . "','" . $state_of_advance . "','" . $id_data_type . "','" . $chk_web . "','" . $chk_invoice . "','" . $chk_estimmate . "')";
+        $sql_query = "insert into product_variable(name,requard_state,ast,sdt,product_variable_category_idproduct_variable_category,user_login_iduser_login,advance_settings,type_of_variables_idtype_of_variables,show_on_web,show_on_invoice,show_on_qutation) " .
+                "values('" . $name_of_variable . "','" . $chk_req . "','1',now(),'" . $id_cat . "','" . $userid . "','" . $state_of_advance . "','" . $id_data_type . "','" . $chk_web . "','" . $chk_invoice . "','" . $chk_estimmate . "')";
+//        echo 'sql quary  '. $sql_query;
         $database_connction->query($sql_query);
         echo $database_connction->insert_id;
         echo $database_connction->error;

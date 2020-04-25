@@ -212,6 +212,7 @@
                 success: function (data) {
                     if (!isNaN(data)) {
                         select_data_type_of_variable(data, name_of_cat_obj.value, error_id_obj);
+                        data_load();
                     } else {
                         error_id_obj.appendChild(document.createTextNode(data));
                     }
@@ -450,7 +451,8 @@
         });
 
     }
-    function add_data(type_id, cat_id, cat_name, data_type, name_txt_obj, requard_check_obj, check_show_on_web_obj, check_show_on_invoice_obj, check_show_on_estimate_obj, error_obj, state_of_advance) {
+    function add_data(cat_id,type_id, cat_name, data_type, name_txt_obj, requard_check_obj, check_show_on_web_obj, check_show_on_invoice_obj, check_show_on_estimate_obj, error_obj, state_of_advance) {
+        
         if (name_txt_obj.value == "") {
             name_txt_obj.setAttribute("class", "w3-input w3-red w3-border w3-border-black");
             error_obj.appendChild(document.createTextNode("name field cant be empty to continue"));
@@ -586,7 +588,7 @@
             data: sending_value,
             cache: false,
             success: function (data) {
-                alert(data);
+//                alert(data);
                 var json = eval(data);
                 for (var i = 0; i < json.length; i++) {
                     drop_down_load_data_table(json[i].id_value, json[i].value_of_dropdown, "", table_body, type_of_data);
