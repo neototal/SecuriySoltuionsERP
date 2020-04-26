@@ -264,7 +264,9 @@ $_SESSION['page_id'] = "000003_0001";
 
 
                 btn_view.addEventListener("click", function () {
+                    
                     preview_operation(cat_id, cat_name, preview_div, settings_div, cat_col_01, cat_col_02, cat_col_03, cat_col_04);
+                    main_row.scrollIntoView(true);
                 });
 
 
@@ -293,6 +295,10 @@ $_SESSION['page_id'] = "000003_0001";
             function preview_operation(cat_id, cat_name, preview_div_obj, settings_div_obj, heading_div, btn_view_div, btn_update_div, btn_del_div) {
                 $(preview_div_obj).empty();
                 $(settings_div_obj).empty();
+
+
+
+
 
                 $(heading_div).empty();
 
@@ -339,14 +345,14 @@ $_SESSION['page_id'] = "000003_0001";
                     setting_operation(cat_id, cat_name, preview_div_obj, settings_div_obj, heading_div, btn_view_div, btn_update_div, btn_del_div);
                 });
 
-                var tool_btn_settings = document.createElement("span");
-                tool_btn_settings.setAttribute("class", "w3-tag w3-small w3-text w3-theme-dark");
-                tool_btn_settings.style.width = "100%";
-                tool_btn_settings.appendChild(document.createTextNode("settings"));
+                var tool_view = document.createElement("span");
+                tool_view.setAttribute("class", "w3-tag w3-small w3-text w3-theme-dark");
+                tool_view.appendChild(document.createTextNode("setting"));
+                tool_view.style.width = "100%";
 
 
                 a_col_02.appendChild(btn_settings);
-                a_col_02.appendChild(tool_btn_settings);
+                a_col_02.appendChild(tool_view);
 
                 var a_col_03 = document.createElement("div");
                 a_col_03.setAttribute("class", "col-lg-1 w3-tooltip");
@@ -382,10 +388,14 @@ $_SESSION['page_id'] = "000003_0001";
 
                 $(preview_div_obj).slideDown(1000);
                 $(settings_div_obj).slideUp(1000);
+
+             
             }
             function setting_operation(cat_id, cat_name, preview_div_obj, settings_div_obj, heading_div, btn_view_div, btn_update_div, btn_del_div) {
                 $(preview_div_obj).empty();
                 $(settings_div_obj).empty();
+
+
 
                 var settings_div_col = document.createElement("div");
                 settings_div_col.setAttribute("class", "col-lg-12");
@@ -417,14 +427,15 @@ $_SESSION['page_id'] = "000003_0001";
                     preview_operation(cat_id, cat_name, preview_div_obj, settings_div_obj, heading_div, btn_view_div, btn_update_div, btn_del_div);
                 });
 
-                var tool_btn_settings = document.createElement("span");
-                tool_btn_settings.setAttribute("class", "w3-tag w3-small w3-text w3-theme-dark");
-                tool_btn_settings.style.width = "100%";
-                tool_btn_settings.appendChild(document.createTextNode("preview "));
+                var tool_view = document.createElement("span");
+                tool_view.setAttribute("class", "w3-tag w3-small w3-text w3-theme-dark");
+                tool_view.appendChild(document.createTextNode("view"));
+                tool_view.style.width = "100%";
+
 
 
                 a_col_02.appendChild(btn_settings);
-                a_col_02.appendChild(tool_btn_settings);
+                a_col_02.appendChild(tool_view);
 
                 var a_col_03 = document.createElement("div");
                 a_col_03.setAttribute("class", "col-lg-1 w3-tooltip");
@@ -463,26 +474,50 @@ $_SESSION['page_id'] = "000003_0001";
                 $(preview_div_obj).slideUp(1000);
 
                 div_contaner.appendChild(document.createElement("hr"));
-                list_of_variables(cat_id, "", div_contaner);
+
+                var div_body = document.createElement("div");
+                list_of_variables(cat_id, "", div_body);
+                div_contaner.appendChild(div_body);
+                
+               
+                
             }
 
-            function list_of_variables(id, search_valuem, div_contaner) {
-list_variable=0;
-                list_of_variable_table('1', "fdkla", "number", div_contaner);
-                list_of_variable_table('1', "fdkla", "number", div_contaner);
-                list_of_variable_table('1', "fdkla", "Multiple Selections", div_contaner);
-                list_of_variable_table('1', "fdkla", "Drop Down List", div_contaner);
+            function list_of_variables(cat_id, search_value, div_contaner) {
+                list_variable = 0;
+                $(div_contaner).empty();
+                var sending_value = "cat_id=" + cat_id + "&search_val=" + search_value;
+//                alert(sending_value);
+                $.ajax({
+                    url: "variable_settings/load_variable.php",
+                    type: 'POST',
+                    data: sending_value,
+                    cache: false,
+                    success: function (data) {
+//                        alert(data);
+                        var json = eval(data);
+                        for (var i = 0; i < json.length; i++) {
+                            list_of_variable_table(json[i].idproduct_variable, json[i].name, json[i].data_type, div_contaner);
+                        }
+                        if (json.length == 0) {
+                            div_contaner.setAttribute("class", "w3-center");
+                            div_contaner.appendChild(document.createElement("Not Found"));
+                        }
+                    }
+
+                });
+
 
             }
-            var list_variable=0;
+            var list_variable = 0;
             function list_of_variable_table(id, name, data_type, div_contaner) {
 
                 var div_row = document.createElement("div");
-                if(list_variable==0){
+                if (list_variable == 0) {
                     list_variable++;
-                    div_row.setAttribute("class", "row w3-padding w3-theme-l5 w3-border-bottom w3-border-top w3-border-black w3-hover-blue-grey");
-                }else{
-                    div_row.setAttribute("class", "row w3-padding w3-theme-l5 w3-border-bottom w3-border-black w3-hover-blue-grey");
+                    div_row.setAttribute("class", "row w3-padding w3-theme-l5 w3-border-bottom w3-border-top w3-border-black w3-hover-grey");
+                } else {
+                    div_row.setAttribute("class", "row w3-padding w3-theme-l5 w3-border-bottom w3-border-black w3-hover-grey");
                 }
 
                 var div_col_01 = document.createElement("div");
@@ -498,7 +533,7 @@ list_variable=0;
                 div_col_03.setAttribute("class", "col-lg-1 w3-tooltip");
 
 
-                 var btn_view = document.createElement("button");
+                var btn_view = document.createElement("button");
                 btn_view.setAttribute("class", "w3-button w3-theme-dark w3-round w3-input w3-hover-blue-grey ");
                 var span_btn_view = document.createElement("span");
                 span_btn_view.setAttribute("class", "fa fa-list-ul");
@@ -508,9 +543,9 @@ list_variable=0;
                 tool_view.setAttribute("class", "w3-tag w3-small w3-text w3-theme-dark");
                 tool_view.appendChild(document.createTextNode("view"));
                 tool_view.style.width = "100%";
-                
-                if(data_type=="Drop Down List"|| data_type=="Multiple Selections"){
-                    
+
+                if (data_type == "Drop Down List" || data_type == "Multiple Selections") {
+
                     div_col_03.appendChild(btn_view);
                     div_col_03.appendChild(tool_view);
                 }
@@ -528,7 +563,7 @@ list_variable=0;
                 var tool_update = document.createElement("span");
                 tool_update.setAttribute("class", "w3-tag w3-small w3-text w3-theme-dark");
                 tool_update.appendChild(document.createTextNode("update"));
-                tool_update.style.display="100%";
+                tool_update.style.display = "100%";
                 div_col_04.appendChild(btn_update);
                 div_col_04.appendChild(tool_update);
 
