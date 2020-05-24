@@ -140,7 +140,7 @@ $_SESSION['page_id'] = "000003_0001";
                     type: 'POST',
                     cache: false,
                     success: function (data) {
-
+                      ;
                         var json = eval(data);
                         for (var i = 0; i < json.length; i++) {
                             data_load_table(json[i].idproduct_variable_category, json[i].name);
@@ -264,7 +264,7 @@ $_SESSION['page_id'] = "000003_0001";
 
 
                 btn_view.addEventListener("click", function () {
-                    
+
                     preview_operation(cat_id, cat_name, preview_div, settings_div, cat_col_01, cat_col_02, cat_col_03, cat_col_04);
                     main_row.scrollIntoView(true);
                 });
@@ -389,7 +389,7 @@ $_SESSION['page_id'] = "000003_0001";
                 $(preview_div_obj).slideDown(1000);
                 $(settings_div_obj).slideUp(1000);
 
-             
+
             }
             function setting_operation(cat_id, cat_name, preview_div_obj, settings_div_obj, heading_div, btn_view_div, btn_update_div, btn_del_div) {
                 $(preview_div_obj).empty();
@@ -478,9 +478,9 @@ $_SESSION['page_id'] = "000003_0001";
                 var div_body = document.createElement("div");
                 list_of_variables(cat_id, "", div_body);
                 div_contaner.appendChild(div_body);
-                
-               
-                
+
+
+
             }
 
             function list_of_variables(cat_id, search_value, div_contaner) {
@@ -494,7 +494,7 @@ $_SESSION['page_id'] = "000003_0001";
                     data: sending_value,
                     cache: false,
                     success: function (data) {
-//                        alert(data);
+                        alert(data);
                         var json = eval(data);
                         for (var i = 0; i < json.length; i++) {
                             list_of_variable_table(json[i].idproduct_variable, json[i].name, json[i].data_type, div_contaner);
