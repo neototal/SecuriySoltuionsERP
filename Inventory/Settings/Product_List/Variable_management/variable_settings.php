@@ -140,10 +140,13 @@ $_SESSION['page_id'] = "000003_0001";
                     type: 'POST',
                     cache: false,
                     success: function (data) {
-                      ;
+                        ;
                         var json = eval(data);
                         for (var i = 0; i < json.length; i++) {
                             data_load_table(json[i].idproduct_variable_category, json[i].name);
+                        }
+                        if (json.length == 0) {
+                            $("#myModal_loder").modal('hide');
                         }
                     }
                 });
@@ -494,14 +497,16 @@ $_SESSION['page_id'] = "000003_0001";
                     data: sending_value,
                     cache: false,
                     success: function (data) {
-                        alert(data);
+//                        alert(data);
                         var json = eval(data);
                         for (var i = 0; i < json.length; i++) {
-                            list_of_variable_table(json[i].idproduct_variable, json[i].name, json[i].data_type, div_contaner);
+                            list_of_variable_table(json[i].idproduct_variable, json[i].name, json[i].data_type, json[i].data_type_id, div_contaner);
                         }
+
                         if (json.length == 0) {
                             div_contaner.setAttribute("class", "w3-center");
-                            div_contaner.appendChild(document.createElement("Not Found"));
+                            div_contaner.appendChild(document.createTextNode("Not Found"));
+                            $("#myModal_loder").modal('hide');
                         }
                     }
 
@@ -510,7 +515,7 @@ $_SESSION['page_id'] = "000003_0001";
 
             }
             var list_variable = 0;
-            function list_of_variable_table(id, name, data_type, div_contaner) {
+            function list_of_variable_table(id, name, data_type, data_type_id, div_contaner) {
 
                 var div_row = document.createElement("div");
                 if (list_variable == 0) {
@@ -521,7 +526,7 @@ $_SESSION['page_id'] = "000003_0001";
                 }
 
                 var div_col_01 = document.createElement("div");
-                div_col_01.setAttribute("class", "col-lg-5");
+                div_col_01.setAttribute("class", "col-lg-6");
                 div_col_01.appendChild(document.createTextNode(name));
 
                 var div_col_02 = document.createElement("div");
@@ -539,6 +544,7 @@ $_SESSION['page_id'] = "000003_0001";
                 span_btn_view.setAttribute("class", "fa fa-list-ul");
                 btn_view.appendChild(span_btn_view);
 
+
                 var tool_view = document.createElement("span");
                 tool_view.setAttribute("class", "w3-tag w3-small w3-text w3-theme-dark");
                 tool_view.appendChild(document.createTextNode("view"));
@@ -548,6 +554,26 @@ $_SESSION['page_id'] = "000003_0001";
 
                     div_col_03.appendChild(btn_view);
                     div_col_03.appendChild(tool_view);
+
+                    var body_data_list_row = document.createElement("div");
+                    body_data_list_row.setAttribute("class", "row");
+
+                    var body_data_list_col_01 = document.createElement("div");
+                    body_data_list_col_01.setAttribute("class", "col-lg-2");
+
+                    var body_data_list_col_02 = document.createElement("div");
+                    body_data_list_col_02.setAttribute("class", "col-lg-8");
+
+                    var body_data_list_col_03 = document.createElement("div");
+                    body_data_list_col_03.setAttribute("class", "col-lg-2");
+
+                    body_data_list_row.appendChild(body_data_list_col_01);
+                    body_data_list_row.appendChild(body_data_list_col_02);
+                    body_data_list_row.appendChild(body_data_list_col_03);
+
+                    btn_view.addEventListener("click", function () {
+                        load_details_of_multiple_value_list(id, name, data_type, data_type_id, body_data_list_col_02);
+                    });
                 }
 
 
@@ -588,13 +614,230 @@ $_SESSION['page_id'] = "000003_0001";
                 div_row.appendChild(div_col_01);
                 div_row.appendChild(div_col_02);
                 div_row.appendChild(div_col_03);
-                div_row.appendChild(div_col_04);
+//                div_row.appendChild(div_col_04);
                 div_row.appendChild(div_col_05);
 
 
 
                 div_contaner.appendChild(div_row);
+
+                if (data_type == "Drop Down List" || data_type == "Multiple Selections") {
+                    div_contaner.appendChild(body_data_list_row);
+                }
 //                div_contaner.appendChild(document.createElement("hr"));
+            }
+            function load_details_of_multiple_value_list(id, name, data_type_name, data_type_id, div_body) {
+                var div_contaner = document.createElement("div");
+
+
+                div_contaner.setAttribute("class", "container-fluid w3-margin w3-theme-l3 w3-round");
+
+
+                var a_div_row = document.createElement("div");
+                a_div_row.setAttribute("class", "row w3-margin-bottom w3-margin-top");
+
+                var a_div_col_01 = document.createElement("div");
+                a_div_col_01.setAttribute("class", "col-lg-8");
+
+                var strong = document.createElement("strong");
+                strong.setAttribute("class", "w3-margin");
+                strong.appendChild(document.createTextNode(data_type_name + " List for " + name));
+
+                a_div_col_01.appendChild(strong);
+//                a_div_col_01.appendChild(document.createElement("hr"));
+                a_div_row.appendChild(a_div_col_01);
+
+
+
+                var b_div_row = document.createElement("div");
+                b_div_row.setAttribute("class", "row");
+
+                var b_div_col_01 = document.createElement("div");
+                b_div_col_01.setAttribute("class", "col-lg-8");
+
+                var input_search = document.createElement("input");
+                input_search.setAttribute("type", "text");
+                input_search.setAttribute("class", "w3-input w3-border w3-border-black");
+                input_search.setAttribute("placeholder", "search value form " + name);
+                b_div_col_01.appendChild(input_search);
+
+                var b_div_col_02 = document.createElement("div");
+                b_div_col_02.setAttribute("class", "col-lg-2");
+
+                var b_div_col_03 = document.createElement("div");
+                b_div_col_03.setAttribute("class", "col-lg-2 w3-tooltip");
+
+
+                var btn_close = document.createElement("button");
+                btn_close.setAttribute("class", "w3-button w3-red w3-input w3-round w3-hover-blue-grey");
+                var btn_close_span = document.createElement("span");
+                btn_close_span.setAttribute("class", "fa fa-times");
+                btn_close.appendChild(btn_close_span);
+
+                btn_close.addEventListener("click", function () {
+                    if (confirm("do you want to close this")) {
+                        $(div_body).empty();
+                    }
+                });
+
+                var tool_btn_close = document.createElement("span");
+                tool_btn_close.setAttribute("class", "w3-tag w3-small w3-text w3-red ");
+                tool_btn_close.style.width = "100%";
+                tool_btn_close.appendChild(document.createTextNode("close"));
+
+                b_div_col_03.appendChild(btn_close);
+                b_div_col_03.appendChild(tool_btn_close);
+
+
+                b_div_row.appendChild(b_div_col_01);
+                b_div_row.appendChild(b_div_col_02);
+                b_div_row.appendChild(b_div_col_03);
+//                div_row.appendChild(div_col_04);
+
+                var c_div_row = document.createElement("div");
+                c_div_row.setAttribute("class", "row");
+                var c_div_col_01 = document.createElement("div");
+                c_div_col_01.setAttribute("class", "col-lg-12");
+
+                var div_table_body = document.createElement("div");
+                div_table_body.setAttribute("class", "container-fluid w3-margin");
+                load_details_search(id, data_type_id, div_table_body, "");
+                input_search.addEventListener("keydown", function () {
+                    load_details_search(id, data_type_id, div_table_body, this.value);
+                });
+
+                c_div_col_01.appendChild(div_table_body);
+                c_div_row.appendChild(c_div_col_01);
+
+
+
+                div_contaner.appendChild(a_div_row);
+                div_contaner.appendChild(b_div_row);
+                div_contaner.appendChild(c_div_row);
+                div_body.appendChild(div_contaner);
+
+            }
+
+            function load_details_search(id, data_type_id, div_table_body, value_of_search) {
+                $(div_table_body).empty();
+                var sending_value = "id_product=" + id + "&value=";
+                var url = "";
+                if (data_type_id == 5) {
+                    url = "variable_settings/load_multiple.php";
+                } else if (data_type_id == 6) {
+                    url = "variable_settings/load_drop_down.php";
+                }
+                $.ajax({
+                    url: url,
+                    type: 'POST',
+                    data: sending_value,
+                    catch : false,
+                    success: function (data) {
+//                        alert(data);
+                        var json = eval(data);
+                        for (var i = 0; i < json.length; i++) {
+                            if (data_type_id == 5) {
+                                load_details_of_multiple_value_list_table(json[i].id_value, json[i].value_of_multiple, json[i].img_pth, div_table_body);
+                            } else if (data_type_id == 6) {
+                                load_details_of_dropdown_value_list_table(json[i].id_value, json[i].value_of_dropdown, div_table_body);
+                            }
+                        }
+                    }
+                });
+            }
+
+            function load_details_of_multiple_value_list_table(id, name, img_pth, div_container) {
+                var div_row = document.createElement("div");
+                div_row.setAttribute("class", "row");
+
+                var div_col_01 = document.createElement("div");
+                div_col_01.setAttribute("class", "col-lg-2");
+                var image = document.createElement("img");
+                image.style.width = "80px";
+                if (img_pth == "") {
+                    image.setAttribute("src", "<?php echo $pth; ?>Imports/img/Settings/not_found.png");
+                } else {
+                    image.setAttribute("src", "<?php echo $pth; ?>" + img_pth);
+                }
+                div_col_01.appendChild(image);
+
+
+                var div_col_02 = document.createElement("div");
+                div_col_02.setAttribute("class", "col-lg-8");
+
+                var p_head = document.createElement("p");
+                p_head.setAttribute("class", "w3-padding");
+                p_head.appendChild(document.createTextNode(name));
+                div_col_02.appendChild(p_head);
+
+
+                var div_col_03 = document.createElement("div");
+                div_col_03.setAttribute("class", "col-lg-2 w3-center");
+
+                var btn = document.createElement("button");
+                btn.setAttribute("class", "w3-button w3-red w3-round  w3-hover-blue-grey delete_record");
+                var span = document.createElement("span");
+                span.setAttribute("class", "fa fa-trash-o");
+                btn.appendChild(span);
+                div_col_03.appendChild(btn);
+
+                btn.addEventListener("click", function () {
+                    if (confirm("do you want to delete this record?")) {
+
+                    }
+                });
+
+
+                div_row.appendChild(div_col_01);
+                div_row.appendChild(div_col_02);
+                div_row.appendChild(div_col_03);
+                div_container.appendChild(div_row);
+                div_container.appendChild(document.createElement("hr"));
+            }
+            function load_details_of_dropdown_value_list_table(id, name, div_container) {
+                var div_row = document.createElement("div");
+                div_row.setAttribute("class", "row");
+
+                var div_col_01 = document.createElement("div");
+                div_col_01.setAttribute("class", "col-lg-10");
+
+                var p_head = document.createElement("p");
+                p_head.setAttribute("class", "w3-padding");
+                p_head.appendChild(document.createTextNode(name));
+                div_col_01.appendChild(p_head);
+
+
+                var div_col_02 = document.createElement("div");
+                div_col_02.setAttribute("class", "col-lg-2 w3-center");
+
+                var btn = document.createElement("button");
+                btn.setAttribute("class", "w3-button w3-red w3-round w3-input w3-hover-blue-grey delete_record");
+                var span = document.createElement("span");
+                span.setAttribute("class", "fa fa-trash-o");
+                btn.appendChild(span);
+                div_col_02.appendChild(btn);
+
+                btn.addEventListener("click", function () {
+                    if (confirm("do you want to delete this record?")) {
+                        remove_drop_down_list(id, div_row);
+                    }
+                });
+
+
+                div_row.appendChild(div_col_01);
+                div_row.appendChild(div_col_02);
+                div_container.appendChild(div_row);
+                div_container.appendChild(document.createElement("hr"));
+
+            }
+            function remove_multiple_data_record(id, div_row) {
+            }
+            function remove_drop_down_list(id, div_row) {
+                div_row.remove();
+            }
+            function remove_variables(id, div_row) {
+            }
+            function remove_variable_cat(id, div_row) {
             }
         </script>
         <div class="container w3-padding-16  w3-round w3-theme-l4 w3-card" id="modal_body_table">
