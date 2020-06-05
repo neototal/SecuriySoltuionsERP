@@ -227,6 +227,11 @@ $_SESSION['page_id'] = "000003_0001";
                 var span_btn_del = document.createElement("span");
                 span_btn_del.setAttribute("class", "fa fa-trash-o");
                 btn_del.appendChild(span_btn_del);
+                btn_del.addEventListener("click", function () {
+                    if (confirm("do you want to delete " + cat_name)) {
+                        remove_variable_cat(cat_id, main_row);
+                    }
+                });
 
                 var tool_del = document.createElement("span");
                 tool_del.setAttribute("class", "w3-tag w3-small w3-text w3-red");
@@ -572,6 +577,7 @@ $_SESSION['page_id'] = "000003_0001";
                     body_data_list_row.appendChild(body_data_list_col_03);
 
                     btn_view.addEventListener("click", function () {
+                        $(body_data_list_col_02).empty();
                         load_details_of_multiple_value_list(id, name, data_type, data_type_id, body_data_list_col_02);
                     });
                 }
@@ -598,6 +604,12 @@ $_SESSION['page_id'] = "000003_0001";
 
                 var btn_del = document.createElement("button");
                 btn_del.setAttribute("class", "w3-button w3-red w3-round w3-input w3-hover-blue-grey ");
+                btn_del.addEventListener("click", function () {
+                    if (confirm("do you want to delete")) {
+                        remove_variables(id, div_row);
+                    }
+
+                });
                 var span_btn_del = document.createElement("span");
                 span_btn_del.setAttribute("class", "fa fa-trash-o");
                 btn_del.appendChild(span_btn_del);
@@ -818,9 +830,9 @@ $_SESSION['page_id'] = "000003_0001";
                 div_col_02.appendChild(btn);
 
                 btn.addEventListener("click", function () {
-                    if (confirm("do you want to delete this record?")) {
-                        remove_drop_down_list(id, div_row);
-                    }
+
+                    confirm("Press a button!");
+
                 });
 
 
@@ -836,8 +848,19 @@ $_SESSION['page_id'] = "000003_0001";
                 div_row.remove();
             }
             function remove_variables(id, div_row) {
+                div_row.remove();
             }
             function remove_variable_cat(id, div_row) {
+                var sendingvalue = "id=" + id;
+                $.ajax({
+                    url: "",
+                    type: 'POST',
+                    data: sendingvalue,
+                    catch : false,
+                    success: function (data) {
+                        data_load();
+                    }
+                });
             }
         </script>
         <div class="container w3-padding-16  w3-round w3-theme-l4 w3-card" id="modal_body_table">
