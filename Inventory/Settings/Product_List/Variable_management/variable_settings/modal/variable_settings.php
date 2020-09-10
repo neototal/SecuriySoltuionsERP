@@ -926,6 +926,10 @@
                         </div>
                     </div>
                 </div>
+                <div class="container-fluid w3-text-red w3-center-align w3-center w3-margin" id="modal_error">
+                    test
+                </div>
+            </div>
                 <div class="modal-footer" id="modal_footer">
 
                 </div>

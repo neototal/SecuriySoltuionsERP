@@ -209,6 +209,9 @@ $_SESSION['page_id'] = "000003_0001";
                 var span_btn_update = document.createElement("span");
                 span_btn_update.setAttribute("class", "fa fa-pencil-square-o");
                 btn_update.appendChild(span_btn_update);
+                btn_update.addEventListener("click", function () {
+                    update_variable_cat(cat_id, cat_name);
+                });
 
                 var tool_update = document.createElement("span");
                 tool_update.setAttribute("class", "w3-tag w3-small w3-text w3-theme-dark");
@@ -505,7 +508,7 @@ $_SESSION['page_id'] = "000003_0001";
 //                        alert(data);
                         var json = eval(data);
                         for (var i = 0; i < json.length; i++) {
-                            list_of_variable_table(json[i].idproduct_variable, json[i].name, json[i].data_type, json[i].data_type_id, div_contaner);
+                            list_of_variable_table(cat_id, search_value, div_contaner, json[i].idproduct_variable, json[i].name, json[i].data_type, json[i].data_type_id, div_contaner);
                         }
 
                         if (json.length == 0) {
@@ -520,7 +523,7 @@ $_SESSION['page_id'] = "000003_0001";
 
             }
             var list_variable = 0;
-            function list_of_variable_table(id, name, data_type, data_type_id, div_contaner) {
+            function list_of_variable_table(cat_id, search_value, div_contaner, id, name, data_type, data_type_id, div_contaner) {
 
                 var div_row = document.createElement("div");
                 if (list_variable == 0) {
@@ -606,7 +609,7 @@ $_SESSION['page_id'] = "000003_0001";
                 btn_del.setAttribute("class", "w3-button w3-red w3-round w3-input w3-hover-blue-grey ");
                 btn_del.addEventListener("click", function () {
                     if (confirm("do you want to delete")) {
-                        remove_variables(id, div_row);
+                        remove_variables(id, div_row, cat_id, search_value, div_contaner);
                     }
 
                 });
@@ -847,13 +850,22 @@ $_SESSION['page_id'] = "000003_0001";
             function remove_drop_down_list(id, div_row) {
                 div_row.remove();
             }
-            function remove_variables(id, div_row) {
-                div_row.remove();
+            function remove_variables(id, div_row, cat_id, search_value, div_contaner) {
+                var sendingvalue = "id=" + id;
+                $.ajax({
+                    url: "variable_settings/del_variable_management/remove_variable.php",
+                    type: 'POST',
+                    data: sendingvalue,
+                    catch : false,
+                    success: function (data) {
+                        list_of_variables(cat_id, search_value, div_contaner);
+                    }
+                });
             }
             function remove_variable_cat(id, div_row) {
                 var sendingvalue = "id=" + id;
                 $.ajax({
-                    url: "",
+                    url: "variable_settings/del_variable_management/remove_cat.php",
                     type: 'POST',
                     data: sendingvalue,
                     catch : false,
@@ -861,6 +873,75 @@ $_SESSION['page_id'] = "000003_0001";
                         data_load();
                     }
                 });
+            }
+            function update_variable_cat(cat_id, cat_name) {
+                $("#modal_head").empty();
+                document.getElementById("modal_head").appendChild(document.createTextNode(cat_name + " Update Name"));
+
+                var body = document.getElementById("modal_body");
+                document.getElementById("modal_body_image_uploder").display = "none";
+                $(body).empty();
+
+                var a_div_row = document.createElement("div");
+                a_div_row.setAttribute("class", "row w3-margin-top");
+
+                var a_div_col_01 = document.createElement("div");
+                a_div_col_01.setAttribute("class", "col-lg-12");
+
+                var lable = document.createTextNode("Variable category name");
+                a_div_col_01.appendChild(lable);
+
+                a_div_row.appendChild(a_div_col_01);
+
+                var b_div_row = document.createElement("div");
+                b_div_row.setAttribute("class", "row");
+
+                var b_div_col_01 = document.createElement("div");
+                b_div_col_01.setAttribute("class", "col-lg-12");
+
+
+                var input_text = document.createElement("input");
+                input_text.setAttribute("class", "w3-border w3-border-black w3-input");
+                input_text.setAttribute("type", "text");
+                input_text.setAttribute("placeholder", "variable category name hear");
+                input_text.setAttribute("value", cat_name);
+
+                b_div_col_01.appendChild(input_text);
+                b_div_row.appendChild(b_div_col_01);
+
+                body.appendChild(a_div_row);
+                body.appendChild(b_div_row);
+
+                var modal_error = document.getElementById("modal_error");
+                $(modal_error).empty();
+
+                var footer = document.getElementById("modal_footer");
+                $(footer).empty();
+
+                var button = document.createElement("button");
+                button.setAttribute("class", "w3-button w3-theme-dark w3-round w3-hover-blue-grey");
+                button.appendChild(document.createTextNode("Update Variable Category"));
+
+                button.addEventListener("click", function () {
+                    if (input_text.value != 0) {
+                        update_process(cat_id, input_text.value);
+                    } else {
+                        input_text.setAttribute("class", "w3-border w3-border-red w3-input");
+                        modal_error.appendChild(document.createTextNode("cannot be empty field "));
+                    }
+                });
+
+                input_text.addEventListener("keydown", function () {
+                    $(modal_error).empty();
+                    input_text.setAttribute("class", "w3-border w3-border-black w3-input");
+                });
+
+                footer.appendChild(button);
+
+                $("#myModal").modal('show');
+            }
+            function update_process(cat_id, cat_update_name) {
+
             }
         </script>
         <div class="container w3-padding-16  w3-round w3-theme-l4 w3-card" id="modal_body_table">

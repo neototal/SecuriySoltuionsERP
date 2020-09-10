@@ -12,7 +12,7 @@ $get_id = isset($_POST['id']) ? $_POST['id'] : "0";
 $database_connction = database();
 
 if (isset($get_id)) {
-    $sql_query = "update product_variable_category set ast='0' where idproduct_variable_category='" . $get_id . "'";
+    $sql_query = "update product_variable set ast='0' where idproduct_variable='" . $get_id . "'";
     if ($database_connction->query($sql_query) === TRUE) {
         echo 'ok';
     } else {
